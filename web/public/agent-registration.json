@@ -1,0 +1,10 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Tesorería JIT",
+  "description": "Agente de tesorería para freelancers y devs argentinos: protege los pesos (wARS) convirtiéndolos a USD₮ en Textile FX y paga por uso APIs e IA vía x402, dentro de un presupuesto definido por el usuario.",
+  "image": "",
+  "services": [],
+  "x402Support": true,
+  "active": true,
+  "supportedTrust": ["reputation"]
+}

@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/vault-context.sh" }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "echo 'Recordatorio: si este pedido cambia decisiones, archivos, tareas o preguntas del proyecto, actualizar la bóveda de Obsidian con la skill obsidian-docs antes de terminar.'" }
+        ]
+      }
+    ]
+  }
+}
