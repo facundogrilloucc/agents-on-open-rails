@@ -19,7 +19,8 @@ api_up() { [ -f "$CFG/key" ] && curl -s -m 3 -o /dev/null --cacert "$CFG/obsidia
 
 if api_up; then
   KEY="$(cat "$CFG/key")"
-  enc() { python3 -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$1"; }
+  PY="$(command -v python3 || command -v python)"
+  enc() { "$PY" -c 'import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))' "$1"; }
   req() { curl -sS --fail-with-body --cacert "$CFG/obsidian.crt" -H "Authorization: Bearer $KEY" "$@"; }
   case "$cmd" in
     list)   req "$BASE/vault/$(enc "$path")" ;;

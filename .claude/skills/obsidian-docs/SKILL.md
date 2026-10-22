@@ -14,6 +14,16 @@ La bóveda es la **fuente de verdad** del proyecto. Objetivo: que nadie (Facundo
 
 **Nunca** escribir la API key en archivos del repo, notas ni mensajes. Vive en `~/.config/obsidian-mcp/key`.
 
+La bóveda está en Google Drive (carpeta `OBSIDIAN/Proyecto Open Rails Hackathon`, compartida con Gregorio). Cada máquina indica su ruta local en `OBSIDIAN_VAULT_PATH` o en `~/.config/obsidian-mcp/vault_path`. En Windows, `vault.sh` corre en Git Bash (el mismo shell que usa Claude Code).
+
+## Convivencia: escriben los agentes de Facundo y de Gregorio
+Google Drive no mezcla ediciones simultáneas: si dos máquinas cambian la misma nota a la vez, una pisa a la otra o aparece una copia en conflicto.
+- **Leer justo antes de escribir** y hacer cambios chicos. Preferir `append` a reescribir la nota entera.
+- **Firmar las entradas** de `06 Bitácora` y `04 Decisiones` con el autor: `- (Gregorio) …` / `- (Facundo) …`.
+- Las **tareas por persona** viven en `TODO.md` del repo; en la bóveda solo se resumen.
+- **`08 Grafo del código/` es generada:** solo se toca con `node scripts/graph-to-obsidian.mjs`, nunca a mano ni exportando graphify a otra carpeta de la bóveda.
+- Si aparece un archivo duplicado o "en conflicto", unir el contenido en la nota original, borrar la copia y avisar al usuario.
+
 ## Estructura de la bóveda
 | Nota | Qué contiene |
 |---|---|

@@ -10,7 +10,7 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
   Todo lo que firma va con la etiqueta ERC-8021 (ver `web/scripts/register-agent.mjs`).
 - La clave del agente (`0x477f…2159`) la tiene solo Facundo. Para probar, cada uno usa su propia wallet de desarrollo.
 - Antes de subir cambios: `cd web && npx tsc --noEmit && npm run lint`.
-- Después de cambios grandes: `/graphify --update` y commitear `graphify-out/` (sin la caché).
+- Después de cambios grandes: `/graphify --update`, commitear `graphify-out/` (sin la caché) y `node scripts/graph-to-obsidian.mjs`.
 - Mensajes de commit en español, cortos y claros.
 
 ---
@@ -22,6 +22,11 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
 - [ ] Copiar `web/.env.example` a `web/.env.local` (dejar `AGENT_PRIVATE_KEY` vacío).
 - [ ] Crear una **wallet de desarrollo propia** (MetaMask) en Celo mainnet y pasarle la dirección pública a Facundo.
 - [ ] Probar el script de cotizaciones: `cd web && node scripts/textile-quote.mjs 2000,10000`.
+- [ ] Indicar la ruta local de la bóveda (carpeta de Google Drive) en la variable de entorno `OBSIDIAN_VAULT_PATH`
+      (o en `~/.config/obsidian-mcp/vault_path`). La usan la skill `obsidian-docs` y el script del grafo.
+- [ ] Exportar el grafo a la bóveda **solo** con `node scripts/graph-to-obsidian.mjs` (va a `08 Grafo del código/`).
+      No exportar graphify a otras carpetas de la bóveda: se duplicarían las notas.
+- [ ] Leer las reglas de convivencia en `.claude/skills/obsidian-docs/SKILL.md` (los agentes de los dos escriben en la misma bóveda).
 
 ### 2. Cotización de Textile en la app (prioridad alta)
 Mostrar en el panel a cuánto se convierten los pesos ahora mismo.
