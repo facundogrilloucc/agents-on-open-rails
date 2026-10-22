@@ -18,22 +18,22 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
 ## Gregorio
 
 ### 1. Puesta en marcha (prioridad alta, hoy)
-- [ ] Clonar el repo, `cd web && npm install && npm run dev` y abrir http://localhost:3000.
-- [ ] Copiar `web/.env.example` a `web/.env.local` (dejar `AGENT_PRIVATE_KEY` vacío).
+- [x] Clonar el repo, `cd web && npm install && npm run dev` y abrir http://localhost:3000.
+- [x] Copiar `web/.env.example` a `web/.env.local` (dejar `AGENT_PRIVATE_KEY` vacío).
 - [ ] Crear una **wallet de desarrollo propia** (MetaMask) en Celo mainnet y pasarle la dirección pública a Facundo.
-- [ ] Probar el script de cotizaciones: `cd web && node scripts/textile-quote.mjs 2000,10000`.
-- [ ] Indicar la ruta local de la bóveda (carpeta de Google Drive) en la variable de entorno `OBSIDIAN_VAULT_PATH`
+- [x] Probar el script de cotizaciones: `cd web && node scripts/textile-quote.mjs 2000,10000`.
+- [x] Indicar la ruta local de la bóveda (carpeta de Google Drive) en la variable de entorno `OBSIDIAN_VAULT_PATH`
       (o en `~/.config/obsidian-mcp/vault_path`). La usan la skill `obsidian-docs` y el script del grafo.
-- [ ] Exportar el grafo a la bóveda **solo** con `node scripts/graph-to-obsidian.mjs` (va a `08 Grafo del código/`).
+- [x] Exportar el grafo a la bóveda **solo** con `node scripts/graph-to-obsidian.mjs` (va a `08 Grafo del código/`).
       No exportar graphify a otras carpetas de la bóveda: se duplicarían las notas.
-- [ ] Leer las reglas de convivencia en `.claude/skills/obsidian-docs/SKILL.md` (los agentes de los dos escriben en la misma bóveda).
+- [x] Leer las reglas de convivencia en `.claude/skills/obsidian-docs/SKILL.md` (los agentes de los dos escriben en la misma bóveda).
 
 ### 2. Cotización de Textile en la app (prioridad alta)
 Mostrar en el panel a cuánto se convierten los pesos ahora mismo.
-- [ ] Ruta de API en Next: `web/src/app/api/textile/quote/route.ts` que llame a `POST https://app.textilecredit.com/v2/rfq/preview`
+- [x] Ruta de API en Next: `web/src/app/api/textile/quote/route.ts` que llame a `POST https://app.textilecredit.com/v2/rfq/preview`
       (formato en `web/scripts/textile-quote.mjs`). Se hace del lado del servidor para evitar problemas de CORS.
-- [ ] Componente `TextileQuote` en el panel: monto en wARS → USD₮ estimados, tipo de cambio y comisión. Actualizar cada ~30 s.
-- [ ] Manejar el caso `status: "no_quote"` (por ejemplo, USD₮ → wARS por encima de ~42 USD₮ no tiene liquidez).
+- [x] Componente `TextileQuote` en el panel: monto en wARS → USD₮ estimados, tipo de cambio y comisión. Actualizar cada ~30 s.
+- [x] Manejar el caso `status: "no_quote"` (por ejemplo, USD₮ → wARS por encima de ~42 USD₮ no tiene liquidez).
 - **Listo cuando:** el panel muestra la cotización real y no rompe si Textile no responde.
 
 ### 3. Actividad real del agente (prioridad media)

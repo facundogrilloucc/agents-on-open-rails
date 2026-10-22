@@ -7,6 +7,7 @@ import { Balances } from "@/components/Balances";
 import { BudgetSettings } from "@/components/BudgetSettings";
 import { ConnectButton } from "@/components/ConnectButton";
 import { SavingsCard } from "@/components/SavingsCard";
+import { TextileQuote } from "@/components/TextileQuote";
 import { APP_NAME, APP_TAGLINE, ripioOnrampUrl } from "@/config/app";
 
 const STEPS = [
@@ -59,6 +60,7 @@ export default function Home() {
             </a>
           </div>
           <Balances address={address} />
+          <TextileQuote />
           <div className="grid gap-4 md:grid-cols-2">
             <SavingsCard />
             <BudgetSettings />
