@@ -36,6 +36,10 @@ Mostrar en el panel a cuánto se convierten los pesos ahora mismo.
 - [x] Manejar el caso `status: "no_quote"` (por ejemplo, USD₮ → wARS por encima de ~42 USD₮ no tiene liquidez).
 - **Listo cuando:** el panel muestra la cotización real y no rompe si Textile no responde.
 
+### 2b. Ingreso directo por código/dirección de wallet (prioridad alta — bloqueante para previsualizar)
+Permitir ingresar directamente poniendo el código/dirección de la wallet para conectarse a la misma, sin exigir tener instalada una app o extensión en el navegador/dispositivo:
+- [ ] Habilitar la conexión ingresando manualmente el código/dirección de la wallet en la app (además o en reemplazo de `injected()`), ya que exigir una app o extensión instalada es una restricción para el usuario y, además, sin pasar esa pantalla no se puede acceder al panel (`Tu tesorería`) para previsualizar los demás cambios (`TextileQuote`, `SavingsCard`, `AgentActivity`, etc.).
+
 ### 3. Actividad real del agente (prioridad media)
 Reemplazar el estado vacío de `web/src/components/AgentActivity.tsx` por datos de la blockchain (solo lectura).
 - [ ] Leer con viem los eventos `Transfer` de wARS, USD₮ y USDC donde participe la wallet del agente (`AGENT_ADDRESS` en `web/src/config/app.ts`).
