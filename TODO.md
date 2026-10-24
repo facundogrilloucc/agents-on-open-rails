@@ -36,9 +36,33 @@ Mostrar en el panel a cuánto se convierten los pesos ahora mismo.
 - [x] Manejar el caso `status: "no_quote"` (por ejemplo, USD₮ → wARS por encima de ~42 USD₮ no tiene liquidez).
 - **Listo cuando:** el panel muestra la cotización real y no rompe si Textile no responde.
 
-### 2b. Ingreso directo por código/dirección de wallet (prioridad alta — bloqueante para previsualizar)
-Permitir ingresar directamente poniendo el código/dirección de la wallet para conectarse a la misma, sin exigir tener instalada una app o extensión en el navegador/dispositivo:
-- [ ] Habilitar la conexión ingresando manualmente el código/dirección de la wallet en la app (además o en reemplazo de `injected()`), ya que exigir una app o extensión instalada es una restricción para el usuario y, además, sin pasar esa pantalla no se puede acceder al panel (`Tu tesorería`) para previsualizar los demás cambios (`TextileQuote`, `SavingsCard`, `AgentActivity`, etc.).
+### 2b. Entrar sin extensión de wallet (prioridad alta — bloqueante para previsualizar)
+Exigir una extensión instalada es una barrera para el usuario y hoy impide ver el panel (`Tu tesorería`) sin wallet.
+Decidido (2026-10-24): **modo solo lectura + WalletConnect**, además del conector actual `injected()`.
+
+> ⚠️ Con la dirección pública solo se puede **ver**; para **firmar** hace falta una wallet. La app **nunca** pide
+> clave privada ni frase semilla: en los textos de la UI decir siempre "dirección pública (0x…)".
+
+**Parte A — Modo solo lectura (primero, destraba la previsualización)**
+- [ ] En la pantalla de inicio, además de "Conectar wallet", un campo "Ver una wallet" para pegar una dirección pública.
+      Validar con `isAddress` de viem y normalizar con `getAddress`.
+- [ ] Que la dirección quede en la URL (`/?address=0x…`) para poder compartir el panel (sirve como demo para los jueces,
+      por ejemplo con la wallet del agente `0x477fb107278e0a21e39b424ad7b497E7fd472159`).
+- [ ] Mostrar el panel con esa dirección (`Balances`, `TextileQuote`, `SavingsCard`, `AgentActivity`) y un aviso visible
+      "Modo solo lectura", con botón para salir y otro para conectar una wallet.
+- [ ] Ocultar o deshabilitar lo que requiera firmar (y que "Guardar reglas" diga que en solo lectura no se aplican).
+- **Listo cuando:** sin ninguna extensión se puede pegar una dirección, ver el panel completo y compartir el link.
+
+**Parte B — WalletConnect (para usuarios reales sin extensión)**
+- [ ] Crear un proyecto gratis en Reown (cloud.reown.com) y obtener el `projectId`. Va en `web/.env.local` como
+      `NEXT_PUBLIC_WC_PROJECT_ID` (agregar la variable vacía a `web/.env.example`; el id es público, pero no lo hardcodeen).
+- [ ] Agregar el conector `walletConnect({ projectId })` de `wagmi/connectors` en `web/src/lib/wagmi.ts`, solo Celo mainnet.
+      Revisar en la documentación de wagmi v3 qué paquete extra pide (probablemente `@walletconnect/ethereum-provider`).
+- [ ] En `ConnectButton`: elegir entre "Wallet del navegador" (`injected`) y "WalletConnect (QR con el celular)".
+      Si no hay extensión instalada, mostrar directamente la opción de WalletConnect.
+- [ ] Probar escaneando el QR con una wallet de celular que soporte Celo (por ejemplo, MetaMask mobile) y anotar en la
+      bóveda con cuáles funcionó.
+- **Listo cuando:** se puede conectar desde el celular escaneando el QR, sin extensión, y el panel muestra esa wallet.
 
 ### 3. Actividad real del agente (prioridad media)
 Reemplazar el estado vacío de `web/src/components/AgentActivity.tsx` por datos de la blockchain (solo lectura).
