@@ -43,17 +43,18 @@ Decidido (2026-10-24): **modo solo lectura + WalletConnect**, además del conect
 > ⚠️ Con la dirección pública solo se puede **ver**; para **firmar** hace falta una wallet. La app **nunca** pide
 > clave privada ni frase semilla: en los textos de la UI decir siempre "dirección pública (0x…)".
 
-**Parte A — Modo solo lectura (primero, destraba la previsualización)**
-- [ ] En la pantalla de inicio, además de "Conectar wallet", un campo "Ver una wallet" para pegar una dirección pública.
+**Parte A — Modo solo lectura** ✅ hecha por Facundo/Claude (2026-10-24): `Treasury.tsx`, `WatchAddressForm.tsx`, `ReadOnlyBanner.tsx`.
+Demo: https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424ad7b497E7fd472159
+- [x] En la pantalla de inicio, además de "Conectar wallet", un campo "Ver una wallet" para pegar una dirección pública.
       Validar con `isAddress` de viem y normalizar con `getAddress`.
-- [ ] Que la dirección quede en la URL (`/?address=0x…`) para poder compartir el panel (sirve como demo para los jueces,
+- [x] Que la dirección quede en la URL (`/?address=0x…`) para poder compartir el panel (sirve como demo para los jueces,
       por ejemplo con la wallet del agente `0x477fb107278e0a21e39b424ad7b497E7fd472159`).
-- [ ] Mostrar el panel con esa dirección (`Balances`, `TextileQuote`, `SavingsCard`, `AgentActivity`) y un aviso visible
+- [x] Mostrar el panel con esa dirección (`Balances`, `TextileQuote`, `SavingsCard`, `AgentActivity`) y un aviso visible
       "Modo solo lectura", con botón para salir y otro para conectar una wallet.
-- [ ] Ocultar o deshabilitar lo que requiera firmar (y que "Guardar reglas" diga que en solo lectura no se aplican).
+- [x] Ocultar o deshabilitar lo que requiera firmar (y que "Guardar reglas" diga que en solo lectura no se aplican).
 - **Listo cuando:** sin ninguna extensión se puede pegar una dirección, ver el panel completo y compartir el link.
 
-**Parte B — WalletConnect (para usuarios reales sin extensión)**
+**Parte B — WalletConnect (para usuarios reales sin extensión)** ← Gregorio, siguiente
 - [ ] Crear un proyecto gratis en Reown (cloud.reown.com) y obtener el `projectId`. Va en `web/.env.local` como
       `NEXT_PUBLIC_WC_PROJECT_ID` (agregar la variable vacía a `web/.env.example`; el id es público, pero no lo hardcodeen).
 - [ ] Agregar el conector `walletConnect({ projectId })` de `wagmi/connectors` en `web/src/lib/wagmi.ts`, solo Celo mainnet.
