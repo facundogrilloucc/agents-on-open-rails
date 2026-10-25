@@ -6,6 +6,7 @@ Proyecto de Facundo Grillo y Gregorio para la hackatón **Agents on Open Rails**
 cargás pesos (wARS) con la rampa de Ripio, el agente los protege convirtiéndolos a USD₮ en Textile FX
 y paga por uso APIs e IA vía x402, dentro de un presupuesto que definís vos.
 
+- App publicada: **https://agents-on-open-rails.vercel.app**
 - Red: **Celo mainnet** (chain id 42220).
 - Wallet del agente: `0x477fb107278e0a21e39b424ad7b497E7fd472159` (identidad ERC-8004).
 - Todas las transacciones llevan la etiqueta de atribución ERC-8021.

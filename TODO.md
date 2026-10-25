@@ -93,7 +93,7 @@ Escribir lo encontrado en la bóveda (nota nueva en `03 Técnico/`).
 
 ## Facundo
 
-- [ ] Publicar la app en Vercel (conectada al repo) → URL para la entrega.
+- [x] Publicar la app en Vercel → **https://agents-on-open-rails.vercel.app** (cada push a `main` se publica solo; 2026-10-24).
 - [ ] Confirmar el código de atribución en la plataforma o en Telegram / office hours.
 - [ ] Cargar ~USD 1 de gas en la wallet del agente y registrar la identidad ERC-8004 (`node scripts/register-agent.mjs --send`).
 - [ ] Prueba real en Textile con un monto chico (desde la app de Textile).
