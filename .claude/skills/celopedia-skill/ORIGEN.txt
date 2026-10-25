@@ -1,0 +1,4 @@
+Origen: https://github.com/celo-org/celopedia-skills (skills/celopedia-skill)
+Commit: 4b247d7a71b932d14a9748b2d0dbd54445894a93 (2026-10-23), versión 2.13.0
+Licencia: Apache-2.0
+Actualizar: volver a copiar la carpeta desde el repo y cambiar este archivo.
