@@ -6,7 +6,8 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
 ## Reglas para todos
 
 - **Nunca** commitear `web/.env.local`, claves privadas ni la API key de Obsidian. El repo es público.
-- **Ninguna transacción en Celo mainnet** hasta confirmar el código de atribución (`celo_976812496a25`).
+- **Ninguna transacción en Celo mainnet** hasta definir la entrada del equipo en Loops House y su código de atribución
+  (cada cuenta tiene uno distinto; el que calculamos desde el repo, `celo_976812496a25`, **no** es el correcto).
   Todo lo que firma va con la etiqueta ERC-8021 (ver `web/scripts/register-agent.mjs`).
 - La clave del agente (`0x477f…2159`) la tiene solo Facundo. Para probar, cada uno usa su propia wallet de desarrollo.
 - Antes de subir cambios: `cd web && npx tsc --noEmit && npm run lint`.
