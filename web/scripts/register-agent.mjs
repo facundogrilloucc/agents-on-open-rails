@@ -3,7 +3,7 @@
 //   node scripts/register-agent.mjs          → simulación (no envía nada)
 //   node scripts/register-agent.mjs --send   → envía la transacción (gasta gas)
 //
-// Lee .env.local (ver .env.example). Si la wallet no tiene CELO, paga el gas en USDC.
+// Lee .env.local (ver .env.example). Si la wallet no tiene CELO, paga el gas en USD₮, USDC o USA₮.
 import { codeFromRepo, toDataSuffix, verifyTx } from "@celo/attribution-tags";
 import { readFileSync } from "node:fs";
 import {
@@ -15,8 +15,13 @@ import { celo } from "viem/chains";
 
 const AGENT_ADDRESS = "0x477fb107278e0a21e39b424ad7b497E7fd472159";
 const IDENTITY_REGISTRY = "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432";
-const USDC = "0xcebA9300f2b948710d2653dD7B07f33A8B32118C";
-const USDC_GAS_ADAPTER = "0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B";
+// Stablecoins aceptadas para pagar gas (fee abstraction). En feeCurrency va el adaptador, no el token.
+// Verificadas en el FeeCurrencyDirectory de Celo (0x15F3…6276) el 2026-10-24.
+const GAS_TOKENS = [
+  { symbol: "USD₮", token: "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e", adapter: "0x0E2A3e05bc9A16F5292A6170456A710cb89C6f72" },
+  { symbol: "USDC", token: "0xcebA9300f2b948710d2653dD7B07f33A8B32118C", adapter: "0x2F25deB3848C207fc8E0c34035B3Ba7fC157602B" },
+  { symbol: "USA₮", token: "0xD2ab3C9A02DBBAB236BfEC45D1d755DF4267F771", adapter: "0x0357EE22278c922e1D36cFe6b899269b161880C4" },
+];
 const abi = parseAbi([
   "function register(string agentURI) returns (uint256 agentId)",
   "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
@@ -63,14 +68,17 @@ const uri = AGENT_URI || `data:application/json;base64,${Buffer.from(
 const pub = createPublicClient({ chain: celo, transport: http() });
 const data = concat([encodeFunctionData({ abi, functionName: "register", args: [uri] }), suffix]);
 
-// 4. Gas: CELO si hay; si no, USDC vía el adaptador de fee currency.
-const [celoBal, usdcBal] = await Promise.all([
-  pub.getBalance({ address: from }),
-  pub.readContract({ address: USDC, abi: erc20Abi, functionName: "balanceOf", args: [from] }),
-]);
-const feeCurrency = celoBal === 0n && usdcBal > 0n ? USDC_GAS_ADAPTER : undefined;
+// 4. Gas: CELO si hay; si no, la primera stablecoin con saldo, vía su adaptador de fee currency.
+const celoBal = await pub.getBalance({ address: from });
+const stableBals = await Promise.all(
+  GAS_TOKENS.map((t) => pub.readContract({ address: t.token, abi: erc20Abi, functionName: "balanceOf", args: [from] })),
+);
+const gasToken = celoBal === 0n ? GAS_TOKENS.find((_, i) => stableBals[i] > 0n) : undefined;
+const feeCurrency = gasToken?.adapter;
+const hasGas = celoBal > 0n || !!gasToken;
 console.log(`Wallet: ${from}`);
-console.log(`Saldo: ${formatUnits(celoBal, 18)} CELO · ${formatUnits(usdcBal, 6)} USDC → gas en ${feeCurrency ? "USDC" : "CELO"}`);
+console.log(`Saldo: ${formatUnits(celoBal, 18)} CELO · ${GAS_TOKENS.map((t, i) => `${formatUnits(stableBals[i], 6)} ${t.symbol}`).join(" · ")}`);
+console.log(`Gas en: ${gasToken ? gasToken.symbol : hasGas ? "CELO" : "— (sin saldo)"}`);
 console.log(`Etiqueta: ${ATTRIBUTION_CODE} · URI: ${uri.length > 80 ? `${uri.slice(0, 80)}… (${uri.length} caracteres)` : uri}`);
 
 // 5. Simulación (no gasta nada).
@@ -83,7 +91,7 @@ try {
   else fail(`La simulación falló: ${e.shortMessage ?? e.message}`);
 }
 if (!send) { console.log("\nModo simulación. Para registrar de verdad: node scripts/register-agent.mjs --send"); process.exit(0); }
-if (celoBal === 0n && usdcBal === 0n) fail("La wallet no tiene CELO ni USDC para pagar el gas.");
+if (!hasGas) fail("La wallet no tiene CELO, USD₮, USDC ni USA₮ para pagar el gas.");
 
 // 6. Envío, confirmación y verificación de la etiqueta.
 const wallet = createWalletClient({ account, chain: celo, transport: http() });
