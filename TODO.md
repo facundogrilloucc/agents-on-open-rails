@@ -97,11 +97,12 @@ Escribir lo encontrado en la bóveda (nota nueva en `03 Técnico/`).
 - [ ] Confirmar el código de atribución en la plataforma o en Telegram / office hours.
 - [ ] Cargar ~USD 1 de gas en la wallet del agente y registrar la identidad ERC-8004 (`node scripts/register-agent.mjs --send`).
 - [ ] Prueba real en Textile con un monto chico (desde la app de Textile).
-- [ ] Definir cómo custodia el agente los fondos de los usuarios (wallet por usuario, Para o contrato con permisos).
+- [x] Definir cómo custodia el agente los fondos de los usuarios → **permiso con tope (allowance)**: la plata queda en la wallet del usuario y el agente usa `transferFrom` hasta el tope aprobado (2026-10-24; diseño en la bóveda, `03 Técnico/Custodia con permiso (allowance)`).
 - [ ] Completar y enviar la entrega en Loops House.
 
-## Juntos (cuando esté definida la custodia)
+## Juntos (custodia definida: permiso con tope)
 
-- [ ] Backend del agente: detectar wARS entrantes → convertir en Textile → pagar servicios con x402 dentro del presupuesto.
+- [ ] Pantalla de alta: el usuario firma `approve` de wARS (tope de protección) y de USD₮ (presupuesto de gasto) para la wallet del agente; mostrar los permisos vigentes y un botón para revocarlos.
+- [ ] Backend del agente: detectar wARS del usuario → `transferFrom` → convertir en Textile → devolver USD₮ al usuario; pagar servicios con `transferFrom` de USD₮ + x402, dentro del presupuesto.
 - [ ] Guardar las reglas de presupuesto en el backend (hoy quedan en el navegador).
 - [ ] Conseguir los primeros usuarios reales (devs y estudiantes de la UCC).
