@@ -29,7 +29,7 @@ if api_up; then
     append) req -X POST -H "Content-Type: text/markdown" --data-binary @- "$BASE/vault/$(enc "$path")" ;;
     *) echo "Uso: vault.sh list|get|put|append <ruta>" >&2; exit 2 ;;
   esac
-elif [ -n "$VAULT" ] && [ -d "$VAULT" ]; then
+elif [ -n "$VAULT" ] && [ -d "$VAULT/.obsidian" ] && [ -f "$VAULT/00 Inicio.md" ]; then
   echo "(Obsidian cerrado: usando la carpeta de la bóveda directamente)" >&2
   f="$VAULT/$path"
   case "$cmd" in
@@ -40,6 +40,6 @@ elif [ -n "$VAULT" ] && [ -d "$VAULT" ]; then
     *) echo "Uso: vault.sh list|get|put|append <ruta>" >&2; exit 2 ;;
   esac
 else
-  echo "Bóveda no disponible: Obsidian cerrado y sin ruta configurada (~/.config/obsidian-mcp/vault_path)." >&2
+  echo "Bóveda no disponible: Obsidian cerrado y la ruta configurada no es la bóveda del proyecto (falta .obsidian/ o '00 Inicio.md'; ver ~/.config/obsidian-mcp/vault_path u OBSIDIAN_VAULT_PATH)." >&2
   exit 1
 fi

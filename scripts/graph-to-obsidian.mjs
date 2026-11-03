@@ -22,6 +22,11 @@ function fail(msg) {
   process.exit(1);
 }
 if (!VAULT || !existsSync(VAULT)) fail("No encuentro la bóveda. Definí OBSIDIAN_VAULT_PATH o ~/.config/obsidian-mcp/vault_path");
+// Seguro: la ruta tiene que ser la bóveda del proyecto (con su config y su nota de inicio), no la raíz
+// de Google Drive ni otra carpeta. Una ruta mal configurada ya desparramó el grafo en "My Drive".
+if (!existsSync(join(VAULT, ".obsidian")) || !existsSync(join(VAULT, "00 Inicio.md"))) {
+  fail(`"${VAULT}" no parece la bóveda del proyecto (falta .obsidian/ o "00 Inicio.md"). Revisá OBSIDIAN_VAULT_PATH.`);
+}
 const graph = join(ROOT, "graphify-out", "graph.json");
 if (!existsSync(graph)) fail("Falta graphify-out/graph.json: corré /graphify primero");
 
