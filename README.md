@@ -19,16 +19,21 @@ pesos into USD₮ on **Textile FX**, only at a fair price and within limits the 
 | ERC-8004 identity | **agentId 10050** in the Identity Registry `0x8004A169…a432`, [registration tx](https://celo.blockscout.com/tx/0xbad2370c5771eff8c2baa15580ea421619adcf40f1dc7fc21e56ed97dd18505d) |
 | ERC-8021 attribution tag | `celo_d25b3d01e1b4`, appended to **every** transaction the agent or the app sends |
 | First conversion | 3,000 wARS → 1.8193 USD₮ on Textile FX: [approve](https://celo.blockscout.com/tx/0x5eaab469b385026ab00a0b240bba42b7732750702f6a40ab96afe09ba032abb5) · [swap](https://celo.blockscout.com/tx/0x9cfd4f3835e07ba677b25b31880c1f39e8236c2d5b4b8f8a73121ad73fe49cf4) |
-| Gas | Paid in USD₮ through Celo's fee abstraction (the agent holds no CELO) |
+| **Autonomous run with an independent user wallet** | User `0xbeBC…443F` holds 3,000 wARS and **no CELO**. It signs an EIP-2612 permit; the agent submits it and pays the gas: [permit](https://celo.blockscout.com/tx/0xfc04d39ce0f907d890667cdc82a5bb4d93ad4f8bfec9ddc2e15731378e6bb64e). Then `agent-watch.mjs` detects the permission and, with no human action, pulls the wARS, gets a firm RFQ quote (`rfq_lRqj5uEs74So5IrK`, 3 bps over Textile's reference) and returns 1.8192 USD₮ to the user: [pull](https://celo.blockscout.com/tx/0xaf0472955c3edd6abfb65e6eefd9ffe8349031b470775f4c7d6e8bdf358ef7fd) · [approve](https://celo.blockscout.com/tx/0x2b9745171281175b005107ae225f9fd3655c476154e910b1e71d1d2c8af4d7db) · [swap](https://celo.blockscout.com/tx/0x3109ce6f300043104bde79d2efe74e7ccc22c9a1e9fabafa0c4f0fe1e3ffd6d3) · [return](https://celo.blockscout.com/tx/0x3dc5392ea3cdd979650c2cd9a1acbb9bfc8f33a88a0263c5da4fdb6743d86a58). Decision log: [`web/data/agent-ledger.jsonl`](web/data/agent-ledger.jsonl) |
+| Gas | Paid in USD₮ through Celo's fee abstraction (the agent holds no CELO). Total so far: 0.026 USD₮ for every agent transaction |
 
-Returns versus keeping the pesos, rebuilt from the chain: `cd web && node scripts/pnl.mjs`.
+Returns versus keeping the pesos, rebuilt from the chain: `cd web && node scripts/pnl.mjs`. As of 2026-11-07: 6,000 wARS
+→ 3.6384 USD₮ in 2 conversions (average 1 USD₮ = 1,649.06 wARS), −0.31 % after fees and gas, which is the execution cost
+right after trading; it turns positive as the peso depreciates.
 
 ## How it works
 
 1. **Top up pesos.** The user buys wARS with Ripio's on-ramp, straight to their own wallet on Celo.
-2. **Capped permission, not custody.** In the app, the user approves the agent wallet for a wARS cap (an ERC-20
-   `approve`, tagged). The money stays in the user's wallet; the agent can only pull up to the cap, and the
-   user can revoke it at any time.
+2. **Capped permission, not custody.** In the app, the user approves the agent wallet for a wARS cap. The money
+   stays in the user's wallet; the agent can only pull up to the cap, and the user can revoke it at any time.
+   **No CELO needed:** wARS supports EIP-2612, so the user can just *sign* the permission ("Autorizar sin gas")
+   and the agent submits it, paying the gas in USD₮ and tagging it ([`/api/permit`](web/src/app/api/permit/route.ts)).
+   A user who just bought pesos on Ripio can start right away.
 3. **The agent protects the pesos.** [`agent-watch.mjs`](web/scripts/agent-watch.mjs) checks every minute for
    wARS sent to the agent and for users who approved it. For each, it applies the
    [policy](web/src/config/agent-policy.json): minimum and maximum size, daily cap, and a **price guard** that
@@ -54,14 +59,14 @@ Returns versus keeping the pesos, rebuilt from the chain: `cd web && node script
 |---|---|
 | ✅ Real wARS → USD₮ conversion on Textile FX, mainnet, tagged | done |
 | ✅ ERC-8004 identity, ERC-8021 tags on every transaction | done |
-| ✅ Capped-permission custody (approve / revoke) in the app | done |
+| ✅ Capped-permission custody (approve / revoke) in the app, including gasless EIP-2612 permit | done (gasless permit needs the agent key on the server: works locally; on Vercel once env vars are set) |
 | ✅ Policy enforced by the agent (size, daily cap, price guard) and shown in the app | done |
 | ✅ Autonomous watcher (`agent-watch.mjs`) | done, runs from a terminal (`--send`) |
 | ✅ Returns vs. pesos, verifiable from the chain (`pnl.mjs`, app card) | done |
 | ⏳ Converting back to pesos (USD₮ → wARS) when needed | not automated: liquidity varies |
 | ⏳ Paying APIs per use with x402 / buy | not implemented; limits are reserved in the policy |
 | ⏳ WalletConnect / MiniPay-specific connection | browser wallets only (MetaMask, Rabby, …) |
-| ⏳ Independent users | not yet |
+| ⏳ Independent users | one independent wallet so far (above); more in progress |
 
 ## Run it
 
