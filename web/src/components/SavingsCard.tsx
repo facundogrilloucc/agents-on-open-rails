@@ -27,7 +27,7 @@ export function SavingsCard() {
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-sm font-medium text-muted">Pesos protegidos en dólares</h2>
+      <h2 className="font-display text-lg font-semibold tracking-tight">Pesos protegidos en dólares</h2>
       {warsIn === 0 ? (
         <>
           <div className="mt-2 text-3xl font-semibold tabular-nums">—</div>

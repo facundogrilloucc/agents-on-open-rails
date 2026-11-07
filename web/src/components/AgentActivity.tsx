@@ -86,7 +86,7 @@ export function AgentActivity() {
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-sm font-medium text-muted">Actividad del agente</h2>
+        <h2 className="font-display text-lg font-semibold tracking-tight">Actividad del agente</h2>
         <a
           href={`${EXPLORER_URL}/address/${AGENT_ADDRESS}`}
           target="_blank"
@@ -100,7 +100,7 @@ export function AgentActivity() {
       {isLoading ? (
         <p className="mt-3 text-sm text-muted">Cargando movimientos…</p>
       ) : isError ? (
-        <p className="mt-3 text-sm text-red-500">No se pudo leer la actividad en este momento.</p>
+        <p className="mt-3 text-sm text-danger">No se pudo leer la actividad en este momento.</p>
       ) : !data?.length ? (
         <div className="mt-3 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted">
           Todavía no hay movimientos. Acá van a aparecer las conversiones de wARS a USD₮ y los pagos a
@@ -118,7 +118,7 @@ export function AgentActivity() {
               </div>
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 tabular-nums">
                 {m.legs.map((l, i) => (
-                  <span key={i} className={l.incoming ? "text-accent" : "text-muted"}>
+                  <span key={i} className={l.incoming ? "font-medium text-leaf" : "text-muted"}>
                     {l.incoming ? "+" : "−"}
                     {fmtAmount(l.amount)} {l.symbol}
                   </span>

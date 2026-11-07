@@ -47,7 +47,7 @@ export function ConnectButton() {
         {connect.isPending ? "Conectando…" : "Conectar wallet"}
       </button>
       {connect.error && (
-        <span className="text-xs text-red-500">
+        <span className="text-xs text-danger">
           No se pudo conectar. ¿Tenés MetaMask u otra wallet instalada en el navegador?
         </span>
       )}

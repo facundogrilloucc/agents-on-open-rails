@@ -35,35 +35,44 @@ export function Balances({ address }: { address: Address }) {
   const protectedPct = total ? Math.round((dollars / total) * 100) : null;
 
   return (
-    <section className="rounded-2xl border border-border bg-card p-5">
-      <div className="flex flex-wrap items-end justify-between gap-2">
-        <div>
-          <h2 className="text-sm font-medium text-muted">Tu plata, en pesos</h2>
-          <div className="mt-1 text-3xl font-semibold tabular-nums">
-            {isLoading || total === null ? "…" : `$ ${ars(total)}`}
+    <section className="rounded-3xl bg-feature p-6 text-feature-foreground sm:p-8">
+      <h2 className="text-sm font-medium text-feature-muted">Tu plata, en pesos</h2>
+      <div className="mt-1 font-display text-5xl font-bold tracking-tight text-accent tabular-nums sm:text-6xl">
+        {isLoading || total === null ? "…" : `$ ${ars(total)}`}
+      </div>
+      {protectedPct !== null && (
+        <div className="mt-5 max-w-md">
+          <div className="flex justify-between text-sm tabular-nums">
+            <span>{protectedPct} % protegido en dólares</span>
+            {rate && <span className="text-feature-muted">1 USD₮ = $ {ars(rate)}</span>}
+          </div>
+          {/* Parte de la plata que ya está en dólares (USD₮ + USDC) sobre el total en pesos */}
+          <div
+            className="mt-2 h-2 overflow-hidden rounded-full bg-white/15"
+            role="progressbar"
+            aria-label="Parte protegida en dólares"
+            aria-valuenow={protectedPct}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <div className="h-full rounded-full bg-accent" style={{ width: `${protectedPct}%` }} />
           </div>
         </div>
-        {protectedPct !== null && (
-          <p className="text-sm text-muted tabular-nums">
-            {protectedPct} % protegido en dólares
-            {rate ? ` · 1 USD₮ = $ ${ars(rate)}` : ""}
-          </p>
-        )}
-      </div>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+      )}
+      <ul className="mt-6 grid gap-3 sm:grid-cols-3">
         {rows.map(({ token, amount, inPesos }) => (
-          <li key={token.symbol} className="rounded-xl bg-background p-4">
-            <div className="text-xs text-muted">{token.name}</div>
+          <li key={token.symbol} className="rounded-2xl border border-white/10 bg-white/5 p-4">
+            <div className="text-xs text-feature-muted">{token.name}</div>
             <div className="mt-1 text-2xl font-semibold tabular-nums">
               {isLoading ? "…" : inPesos === null ? "—" : `$ ${ars(inPesos)}`}
             </div>
-            <div className="text-xs text-muted tabular-nums">
+            <div className="text-xs text-feature-muted tabular-nums">
               {amount === null ? "" : `${units(amount)} ${token.symbol}`}
             </div>
           </li>
         ))}
       </ul>
-      {isError && <p className="mt-3 text-xs text-red-500">No se pudieron leer los saldos.</p>}
+      {isError && <p className="mt-3 text-xs text-[#ffb4a6]">No se pudieron leer los saldos.</p>}
     </section>
   );
 }

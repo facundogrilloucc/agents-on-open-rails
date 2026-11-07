@@ -16,7 +16,7 @@ export function AgentPolicy() {
   ];
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-sm font-medium text-muted">Reglas del agente</h2>
+      <h2 className="font-display text-lg font-semibold tracking-tight">Reglas del agente</h2>
       <dl className="mt-3 grid gap-2 text-sm">
         {rules.map((r) => (
           <div key={r.label} className="flex flex-wrap justify-between gap-x-4">

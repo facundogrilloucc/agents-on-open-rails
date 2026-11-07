@@ -46,7 +46,7 @@ export function AgentPermissions({ owner, readOnly = false }: { owner: Address; 
 
   return (
     <section className="rounded-2xl border border-border bg-card p-5">
-      <h2 className="text-sm font-medium text-muted">Permisos al agente</h2>
+      <h2 className="font-display text-lg font-semibold tracking-tight">Permisos al agente</h2>
       <p className="mt-1 text-xs text-muted">
         Tu plata queda en tu wallet. El agente solo puede usar hasta el tope que apruebes, y lo podés revocar cuando quieras.
       </p>
@@ -181,7 +181,7 @@ function PermissionCard({
                 type="button"
                 onClick={() => approveGasless(parseUnits(cap, token.decimals))}
                 disabled={pending || !capValid || nonce.data === undefined}
-                className="rounded-full border border-accent px-4 py-2 text-sm font-medium text-accent disabled:opacity-60"
+                className="rounded-full border border-leaf px-4 py-2 text-sm font-medium text-leaf disabled:opacity-60"
                 title="Firmás un mensaje (no una transacción) y el agente paga el gas"
               >
                 {gasless.pending ? "Firmando…" : "Autorizar sin gas"}
@@ -199,7 +199,7 @@ function PermissionCard({
             )}
           </div>
           {write.error && (
-            <p className="text-xs text-red-500">
+            <p className="text-xs text-danger">
               {/reject|denied/i.test(write.error.message)
                 ? "Cancelaste la firma."
                 : "No se pudo enviar la transacción. ¿Tenés saldo para el gas?"}
@@ -210,7 +210,7 @@ function PermissionCard({
               ¿Sin CELO para el gas? Con &quot;Autorizar sin gas&quot; solo firmás un mensaje y el agente paga el gas en USD₮.
             </p>
           )}
-          {gasless.error && <p className="text-xs text-red-500">{gasless.error}</p>}
+          {gasless.error && <p className="text-xs text-danger">{gasless.error}</p>}
           {gasless.hash && (
             <a
               href={`${EXPLORER_URL}/tx/${gasless.hash}`}

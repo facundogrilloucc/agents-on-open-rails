@@ -43,7 +43,7 @@ export function TextileQuote() {
     <section className="rounded-2xl border border-border bg-card p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h2 className="text-sm font-medium text-muted">Cotización en vivo · Textile FX</h2>
+          <h2 className="font-display text-lg font-semibold tracking-tight">Cotización en vivo en Textile FX</h2>
           <p className="text-xs text-muted">
             Se actualiza automáticamente cada 30 segundos en Celo mainnet.
           </p>
@@ -100,7 +100,7 @@ export function TextileQuote() {
           ) : isLoading ? (
             <div className="mt-1 text-2xl font-semibold tabular-nums text-muted">Cotizando…</div>
           ) : isError || !data || data.status === "error" ? (
-            <div className="mt-1 text-sm text-red-500">
+            <div className="mt-1 text-sm text-danger">
               {data?.status === "error"
                 ? data.error
                 : "No se pudo consultar Textile FX en este momento."}

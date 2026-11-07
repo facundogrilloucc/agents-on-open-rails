@@ -46,7 +46,7 @@ export function WatchAddressForm({ initialError = false }: { initialError?: bool
         </button>
       </div>
       {error ? (
-        <p className="text-xs text-red-500">Esa no es una dirección válida de Celo (0x seguido de 40 caracteres).</p>
+        <p className="text-xs text-danger">Esa no es una dirección válida de Celo (0x seguido de 40 caracteres).</p>
       ) : (
         <p className="text-xs text-muted">
           Solo se ve: no se puede firmar ni mover fondos. Nunca pegues tu clave privada ni tu frase semilla.

@@ -21,10 +21,9 @@ export function ReadOnlyBanner({ address }: { address: Address }) {
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-sm">
-      <div>
-        <span className="font-medium">Modo solo lectura</span>
-        <span className="text-muted"> · viendo </span>
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-pulp px-4 py-3 text-sm">
+      <p>
+        <span className="font-medium">Solo lectura:</span> estás viendo{" "}
         <a
           href={`${EXPLORER_URL}/address/${address}`}
           target="_blank"
@@ -33,8 +32,8 @@ export function ReadOnlyBanner({ address }: { address: Address }) {
         >
           {shortAddress(address)}
         </a>
-        <span className="text-muted"> · no se puede firmar ni mover fondos</span>
-      </div>
+        . No se puede firmar ni mover fondos.
+      </p>
       <div className="flex gap-2">
         <button
           type="button"
