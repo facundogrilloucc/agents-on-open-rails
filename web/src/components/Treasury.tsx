@@ -6,8 +6,8 @@ import { useConnection } from "wagmi";
 import { celo } from "wagmi/chains";
 import { AgentActivity } from "@/components/AgentActivity";
 import { AgentPermissions } from "@/components/AgentPermissions";
+import { AgentPolicy } from "@/components/AgentPolicy";
 import { Balances } from "@/components/Balances";
-import { BudgetSettings } from "@/components/BudgetSettings";
 import { ReadOnlyBanner } from "@/components/ReadOnlyBanner";
 import { SavingsCard } from "@/components/SavingsCard";
 import { TextileQuote } from "@/components/TextileQuote";
@@ -16,8 +16,8 @@ import { APP_TAGLINE, ripioOnrampUrl } from "@/config/app";
 
 const STEPS = [
   { title: "Cargás pesos", text: "Con la rampa de Ripio, directo a tu wallet en Celo como wARS." },
-  { title: "El agente los protege", text: "Los convierte a USD₮ en Textile FX apenas entran." },
-  { title: "Paga por uso", text: "APIs e IA vía x402, dentro del presupuesto que vos definís." },
+  { title: "El agente los protege", text: "Los detecta y los convierte a USD₮ en Textile FX, solo si el precio es bueno." },
+  { title: "Vos ponés las reglas", text: "Le das un permiso con tope; el agente respeta precio máximo y topes diarios, y lo revocás cuando quieras." },
 ];
 
 // Una dirección en la URL (/?address=0x…) abre el panel en modo solo lectura;
@@ -53,7 +53,7 @@ export function Treasury() {
           ))}
         </ol>
         <p className="mt-8 text-sm text-muted">
-          Conectá tu wallet (MiniPay o MetaMask) en Celo para empezar.
+          Conectá tu wallet (MetaMask u otra del navegador) en Celo para empezar.
         </p>
         <div className="mt-6 max-w-xl">
           <WatchAddressForm initialError={invalid} />
@@ -83,7 +83,7 @@ export function Treasury() {
       <TextileQuote />
       <div className="grid gap-4 md:grid-cols-2">
         <SavingsCard />
-        <BudgetSettings readOnly={readOnly} />
+        <AgentPolicy />
       </div>
       <AgentActivity />
     </main>

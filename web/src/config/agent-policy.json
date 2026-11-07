@@ -1,0 +1,20 @@
+{
+  "$comment": "Política del agente. La leen los scripts (scripts/lib/policy.mjs) antes de cada operación y la app la muestra en el panel. Ver STRATEGY.md.",
+  "protect": {
+    "minConvertWars": 1700,
+    "maxConvertPerRunWars": 50000,
+    "maxDailyWars": 200000,
+    "maxSlippageBps": 50,
+    "keepWarsBuffer": 0
+  },
+  "watch": {
+    "intervalSeconds": 60,
+    "usersFromBlock": 82000000
+  },
+  "spend": {
+    "status": "planned",
+    "perPaymentLimitUsdt": 0.3,
+    "dailyLimitUsdt": 2,
+    "requireErc8004Provider": true
+  }
+}

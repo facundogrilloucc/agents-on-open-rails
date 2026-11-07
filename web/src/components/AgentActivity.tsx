@@ -36,9 +36,17 @@ function classify(legs: Leg[]): string {
 }
 
 export async function fetchMovements(): Promise<Movement[]> {
-  const res = await fetch(`${BLOCKSCOUT}/addresses/${AGENT_ADDRESS}/token-transfers?type=ERC-20`);
-  if (!res.ok) throw new Error(`Blockscout HTTP ${res.status}`);
-  const items: Transfer[] = (await res.json()).items ?? [];
+  // Hasta 5 páginas (250 transferencias): alcanza para todo el historial del agente en la hackatón.
+  const items: Transfer[] = [];
+  let params = "";
+  for (let page = 0; page < 5; page++) {
+    const res = await fetch(`${BLOCKSCOUT}/addresses/${AGENT_ADDRESS}/token-transfers?type=ERC-20${params}`);
+    if (!res.ok) throw new Error(`Blockscout HTTP ${res.status}`);
+    const json = await res.json();
+    items.push(...(json.items ?? []));
+    if (!json.next_page_params) break;
+    params = "&" + new URLSearchParams(json.next_page_params).toString();
+  }
   const agent = AGENT_ADDRESS.toLowerCase();
   // Dirección de sistema de Celo que cobra y reintegra el gas pagado en stablecoins (fee abstraction).
   const GAS_SYSTEM = "0x000000000000000000000000000000000ce106a5";
@@ -58,8 +66,8 @@ export async function fetchMovements(): Promise<Movement[]> {
     else m.legs.push({ symbol: token.symbol, amount, incoming });
     byTx.set(t.transaction_hash, m);
   }
-  // Blockscout devuelve lo más reciente primero; alcanza con las últimas 10 operaciones.
-  return [...byTx.values()].slice(0, 10).map((m) => ({ ...m, kind: classify(m.legs) }));
+  // Blockscout devuelve lo más reciente primero. El panel muestra 10; el ahorro usa todas.
+  return [...byTx.values()].map((m) => ({ ...m, kind: classify(m.legs) }));
 }
 
 export const AGENT_ACTIVITY_KEY = ["agent-activity"];
@@ -100,7 +108,7 @@ export function AgentActivity() {
         </div>
       ) : (
         <ul className="mt-3 divide-y divide-border">
-          {data.map((m) => (
+          {data.slice(0, 10).map((m) => (
             <li key={m.hash} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
               <div>
                 <div className="font-medium">{m.kind}</div>

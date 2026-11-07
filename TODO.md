@@ -27,8 +27,8 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
 ## Reglas para todos
 
 - **Nunca** commitear `web/.env.local`, claves privadas ni la API key de Obsidian. El repo es público.
-- **Ninguna transacción en Celo mainnet** hasta definir la entrada del equipo en Loops House y su código de atribución
-  (cada cuenta tiene uno distinto; el que calculamos desde el repo, `celo_976812496a25`, **no** es el correcto).
+- Código de atribución del equipo: `celo_d25b3d01e1b4` (confirmado en Loops House: "Tag seen on-chain").
+  El que se calcula desde el repo, `celo_976812496a25`, **no** es el correcto.
   Todo lo que firma va con la etiqueta ERC-8021 (ver `web/scripts/register-agent.mjs`).
 - La wallet del agente (`0x477f…2159`) la creó Gregorio en su MetaMask: la clave privada se exporta desde ahí y va solo en `web/.env.local` de quien corra los scripts. Para probar, cada uno usa su propia wallet de desarrollo.
 - Antes de subir cambios: `cd web && npx tsc --noEmit && npm run lint`.
@@ -94,9 +94,9 @@ Reemplazar el estado vacío de `web/src/components/AgentActivity.tsx` por datos 
 - **Listo cuando:** muestra "sin movimientos" hoy y va a mostrar los reales apenas el agente opere.
 
 ### 4. Ahorro frente a quedarse en pesos (prioridad media)
-- [ ] En `web/src/components/SavingsCard.tsx`: valor actual en pesos de los USD₮ del usuario vs. los wARS que puso.
+- [x] En `web/src/components/SavingsCard.tsx`: valor actual en pesos de los USD₮ vs. los wARS convertidos (2026-11-07).
       Precio actual: `GET https://app.textilecredit.com/api/price?pair=wars-usdt&chainId=42220` (USD₮ por 1 wARS).
-- [ ] Explicar la cuenta en un texto chico debajo del número.
+- [x] Explicar la cuenta en un texto chico debajo del número.
 
 ### 5. Investigación de x402 y buy (prioridad media)
 Escribir lo encontrado en la bóveda (nota nueva en `03 Técnico/`).
@@ -117,15 +117,16 @@ Escribir lo encontrado en la bóveda (nota nueva en `03 Técnico/`).
 ## Facundo
 
 - [x] Publicar la app en Vercel → **https://agents-on-open-rails.vercel.app** (cada push a `main` se publica solo; 2026-10-24).
-- [ ] Confirmar el código de atribución en la plataforma o en Telegram / office hours.
-- [ ] Cargar ~USD 1 de gas en la wallet del agente y registrar la identidad ERC-8004 (`node scripts/register-agent.mjs --send`).
-- [ ] Prueba real en Textile con un monto chico (desde la app de Textile).
+- [x] Confirmar el código de atribución → `celo_d25b3d01e1b4` (Loops lo ve on-chain, 2026-11-07).
+- [x] Cargar gas y registrar la identidad ERC-8004 → agentId 10050 (2026-11-07).
+- [x] Prueba real en Textile: 3.000 wARS → 1,82 USD₮ (2026-11-07).
 - [x] Definir cómo custodia el agente los fondos de los usuarios → **permiso con tope (allowance)**: la plata queda en la wallet del usuario y el agente usa `transferFrom` hasta el tope aprobado (2026-10-24; diseño en la bóveda, `03 Técnico/Custodia con permiso (allowance)`).
-- [ ] Completar y enviar la entrega en Loops House.
+- [x] Completar y enviar la entrega en Loops House (Gregorio, 2026-11-07).
 
 ## Juntos (custodia definida: permiso con tope)
 
 - [x] Pantalla de permisos (`AgentPermissions.tsx`): `approve` de wARS (tope de protección) y de USD₮ (presupuesto) a la wallet del agente, con etiqueta ERC-8021, permisos vigentes y botón para revocar (2026-11-07).
-- [ ] Backend del agente: detectar wARS del usuario → `transferFrom` → convertir en Textile → devolver USD₮ al usuario; pagar servicios con `transferFrom` de USD₮ + x402, dentro del presupuesto.
-- [ ] Guardar las reglas de presupuesto en el backend (hoy quedan en el navegador).
+- [x] Agente autónomo (`agent-watch.mjs`): detecta wARS (en el agente o de usuarios con permiso) → `transferFrom` → convierte en Textile con guard de precio → devuelve USD₮ (2026-11-07).
+- [ ] Pagar servicios con `transferFrom` de USD₮ + x402 / buy, dentro del presupuesto.
+- [x] Reglas del agente en `web/src/config/agent-policy.json`: las aplica el agente y las muestra la app (2026-11-07).
 - [ ] Conseguir los primeros usuarios reales (devs y estudiantes de la UCC).

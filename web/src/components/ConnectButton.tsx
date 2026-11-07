@@ -48,7 +48,7 @@ export function ConnectButton() {
       </button>
       {connect.error && (
         <span className="text-xs text-red-500">
-          No se pudo conectar. ¿Tenés MiniPay o MetaMask instalado?
+          No se pudo conectar. ¿Tenés MetaMask u otra wallet instalada en el navegador?
         </span>
       )}
     </div>

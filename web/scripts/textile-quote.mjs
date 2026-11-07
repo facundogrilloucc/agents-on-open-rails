@@ -2,10 +2,12 @@
 // Uso: node scripts/textile-quote.mjs [montos en wARS separados por coma]
 // Ej.:  node scripts/textile-quote.mjs 1000,10000,100000,1000000
 //
-// Ojo: es el endpoint que usa la app web de Textile; no encontramos documentación pública.
+// API de Textile v2 (docs.textilecredit.com/llms-full.txt).
 import { formatUnits, parseUnits } from "viem";
 
-const API = "https://app.textilecredit.com";
+// RFQ: API documentada (docs.textilecredit.com). Precio de referencia: solo en la app web de Textile.
+const API = "https://api.textilecredit.com";
+const PRICE_API = "https://app.textilecredit.com";
 const CHAIN_ID = 42220;
 const wARS = { symbol: "wARS", address: "0x0dc4f92879b7670e5f4e4e6e3c801d229129d90d", decimals: 18 };
 const USDT = { symbol: "USD₮", address: "0x48065fbBE25f71C9282ddf5e1cD6D6A887483D5e", decimals: 6 };
@@ -55,7 +57,7 @@ async function preview(sell, buy, amount) {
 }
 
 async function midPrice() {
-  const res = await fetch(`${API}/api/price?pair=wars-usdt&chainId=${CHAIN_ID}`);
+  const res = await fetch(`${PRICE_API}/api/price?pair=wars-usdt&chainId=${CHAIN_ID}`);
   const json = await res.json().catch(() => null);
   return json?.price ?? null; // USD₮ por 1 wARS
 }

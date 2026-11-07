@@ -2,7 +2,9 @@ import { formatUnits, parseUnits } from "viem";
 import { celo } from "viem/chains";
 import { TOKENS } from "@/config/app";
 
-const TEXTILE_API = "https://app.textilecredit.com";
+// RFQ: API documentada (docs.textilecredit.com). Precio de referencia: solo lo expone la app web de Textile.
+const TEXTILE_API = "https://api.textilecredit.com";
+const TEXTILE_PRICE_API = "https://app.textilecredit.com";
 
 export type QuoteDirection = "wARS_to_USDT" | "USDT_to_wARS";
 
@@ -74,7 +76,7 @@ export async function POST(request: Request) {
         }),
         cache: "no-store",
       }),
-      fetch(`${TEXTILE_API}/api/price?pair=wars-usdt&chainId=${celo.id}`, {
+      fetch(`${TEXTILE_PRICE_API}/api/price?pair=wars-usdt&chainId=${celo.id}`, {
         cache: "no-store",
       }).catch(() => null),
     ]);

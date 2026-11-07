@@ -13,7 +13,8 @@ async function fetchWarsPerUsdt(): Promise<number | null> {
     body: JSON.stringify({ direction: "wARS_to_USDT", amount: 10000 }),
   });
   const q: TextileQuoteResponse = await res.json();
-  if (q.status === "preview") return q.warsPerUsdt;
+  // Precio de referencia de Textile (el mismo benchmark que scripts/pnl.mjs); si no está, la cotización.
+  if (q.status === "preview") return q.referenceWarsPerUsdt ?? q.warsPerUsdt;
   if (q.status === "no_quote") return q.referenceWarsPerUsdt;
   return null;
 }
@@ -59,7 +60,7 @@ export function SavingsCard() {
               {Math.abs(diff) < 1
                 ? " (lo mismo que si los dejabas en pesos)"
                 : ` (${diff > 0 ? "+" : "−"}${ars(Math.abs(diff))} frente a haberlos dejado en pesos)`}
-              . Si el dólar sube, la diferencia crece a tu favor.
+              . Incluye la comisión de Textile; no el gas. Si el dólar sube, la diferencia crece a tu favor.
             </p>
           )}
         </>

@@ -3,7 +3,7 @@ import type { Address } from "viem";
 // Nombre provisorio: cambiarlo acá cambia toda la app.
 export const APP_NAME = "Tesorería JIT";
 export const APP_TAGLINE =
-  "Cargás en pesos, tu agente lo protege en dólares y paga por uso las herramientas que necesitás.";
+  "Cargás en pesos y tu agente los protege en dólares, con reglas que vos controlás.";
 
 export type Token = {
   symbol: string;
