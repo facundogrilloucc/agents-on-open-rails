@@ -2,15 +2,17 @@
 
 import { toDataSuffix } from "@celo/attribution-tags";
 import { useEffect, useState } from "react";
-import { erc20Abi, formatUnits, maxUint256, parseUnits, type Address } from "viem";
-import { useReadContracts, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { erc20Abi, formatUnits, maxUint256, parseAbi, parseUnits, type Address, type Hex } from "viem";
+import { useReadContract, useReadContracts, useSignTypedData, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { AGENT_ADDRESS, ATTRIBUTION_CODE, EXPLORER_URL, TOKENS, type Token } from "@/config/app";
+import { PERMIT_DOMAIN, PERMIT_TTL_SECONDS, PERMIT_TYPES } from "@/config/permit";
 
 // Custodia por permiso con tope: la plata queda en la wallet del usuario y el agente solo puede tomar
 // (transferFrom) hasta el monto que el usuario aprueba acá. Se revoca en cualquier momento.
-const PERMISSIONS: { token: Token; title: string; help: string; suggested: string }[] = [
+const PERMISSIONS: { token: Token; title: string; help: string; suggested: string; permit?: boolean }[] = [
   {
     token: TOKENS.wARS,
+    permit: true, // wARS soporta EIP-2612: se puede autorizar con una firma, sin gas
     title: "Pesos a proteger",
     help: "El agente puede tomar hasta este monto de wARS, convertirlo a USD₮ en Textile FX y devolvértelo en dólares.",
     suggested: "10000",
@@ -24,6 +26,7 @@ const PERMISSIONS: { token: Token; title: string; help: string; suggested: strin
 ];
 
 const suffix = toDataSuffix(ATTRIBUTION_CODE);
+const noncesAbi = parseAbi(["function nonces(address owner) view returns (uint256)"]);
 const ZERO = BigInt(0);
 const UNLIMITED_FROM = maxUint256 / BigInt(2);
 
@@ -55,6 +58,7 @@ export function AgentPermissions({ owner, readOnly = false }: { owner: Address; 
             <PermissionCard
               key={p.token.symbol}
               {...p}
+              owner={owner}
               allowance={allowance}
               balance={balance}
               readOnly={readOnly}
@@ -68,21 +72,54 @@ export function AgentPermissions({ owner, readOnly = false }: { owner: Address; 
 }
 
 function PermissionCard({
-  token, title, help, suggested, allowance, balance, readOnly, onDone,
+  token, title, help, suggested, permit = false, owner, allowance, balance, readOnly, onDone,
 }: {
-  token: Token; title: string; help: string; suggested: string;
+  token: Token; title: string; help: string; suggested: string; permit?: boolean; owner: Address;
   allowance?: bigint; balance?: bigint; readOnly: boolean; onDone: () => unknown;
 }) {
   const [cap, setCap] = useState(suggested);
   const write = useWriteContract();
   const receipt = useWaitForTransactionReceipt({ hash: write.data });
 
+  // Permiso sin gas (EIP-2612): el usuario firma y el agente lo presenta pagando el gas (ver /api/permit).
+  const sign = useSignTypedData();
+  const nonce = useReadContract({
+    address: token.address, abi: noncesAbi, functionName: "nonces", args: [owner],
+    query: { enabled: permit && !readOnly },
+  });
+  const [gasless, setGasless] = useState<{ pending: boolean; hash?: Hex; error?: string }>({ pending: false });
+
+  async function approveGasless(amount: bigint) {
+    if (nonce.data === undefined) return;
+    setGasless({ pending: true });
+    try {
+      const deadline = BigInt(Math.floor(Date.now() / 1000) + PERMIT_TTL_SECONDS);
+      const signature = await sign.signTypedDataAsync({
+        domain: PERMIT_DOMAIN, types: PERMIT_TYPES, primaryType: "Permit",
+        message: { owner, spender: AGENT_ADDRESS, value: amount, nonce: nonce.data, deadline },
+      });
+      const res = await fetch("/api/permit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ owner, value: amount.toString(), deadline: deadline.toString(), signature }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error ?? `Error ${res.status}`);
+      setGasless({ pending: false, hash: json.hash });
+      nonce.refetch();
+      onDone();
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setGasless({ pending: false, error: /reject|denied/i.test(msg) ? "Cancelaste la firma." : msg });
+    }
+  }
+
   // Cuando se confirma la transacción, refrescar permisos y saldos.
   useEffect(() => {
     if (receipt.isSuccess) onDone();
   }, [receipt.isSuccess, onDone]);
 
-  const pending = write.isPending || receipt.isLoading;
+  const pending = write.isPending || receipt.isLoading || gasless.pending;
   const capValid = Number(cap) > 0;
 
   function approve(amount: bigint) {
@@ -135,8 +172,19 @@ function PermissionCard({
               disabled={pending || !capValid}
               className="rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground disabled:opacity-60"
             >
-              {pending ? "Esperando firma…" : "Autorizar"}
+              {write.isPending || receipt.isLoading ? "Esperando firma…" : "Autorizar"}
             </button>
+            {permit && (
+              <button
+                type="button"
+                onClick={() => approveGasless(parseUnits(cap, token.decimals))}
+                disabled={pending || !capValid || nonce.data === undefined}
+                className="rounded-full border border-accent px-4 py-2 text-sm font-medium text-accent disabled:opacity-60"
+                title="Firmás un mensaje (no una transacción) y el agente paga el gas"
+              >
+                {gasless.pending ? "Firmando…" : "Autorizar sin gas"}
+              </button>
+            )}
             {allowance !== undefined && allowance > ZERO && (
               <button
                 type="button"
@@ -154,6 +202,22 @@ function PermissionCard({
                 ? "Cancelaste la firma."
                 : "No se pudo enviar la transacción. ¿Tenés saldo para el gas?"}
             </p>
+          )}
+          {permit && (
+            <p className="text-xs text-muted">
+              ¿Sin CELO para el gas? Con &quot;Autorizar sin gas&quot; solo firmás un mensaje y el agente paga el gas en USD₮.
+            </p>
+          )}
+          {gasless.error && <p className="text-xs text-red-500">{gasless.error}</p>}
+          {gasless.hash && (
+            <a
+              href={`${EXPLORER_URL}/tx/${gasless.hash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted underline underline-offset-2"
+            >
+              Permiso registrado por el agente ✓ · ver transacción ↗
+            </a>
           )}
           {write.data && (
             <a
