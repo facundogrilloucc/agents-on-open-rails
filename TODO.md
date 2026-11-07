@@ -2,6 +2,39 @@
 
 ## 🚨 Cierre: lun 9 nov, 06:00 (Argentina) — entregar el domingo 8
 
+### 📌 Grego, leé esto primero (actualizado sáb 7/11 a la noche por Facundo)
+
+**Qué cambió hoy** (todo en `main`, detalle en el [README](README.md) y en [STRATEGY.md](STRATEGY.md)):
+- El proyecto se llama **MangoJIT** (logo del mango en la app).
+- **Agente autónomo** `web/scripts/agent-watch.mjs`: detecta wARS que llegan al agente o usuarios que le dieron permiso,
+  convierte en Textile y devuelve los USD₮, sin intervención. Corrió de verdad con la MetaMask de Facundo
+  (log en `docs/logs/agent-watch-2026-11-07.log`).
+- **Política que el agente aplica** (`web/src/config/agent-policy.json`): topes de monto, tope diario y **guard de precio**
+  (rechaza cotizaciones > 0,5 % peores que la referencia de Textile). Reemplaza las "reglas" que solo se guardaban en el navegador.
+  Hay una operación rechazada de prueba documentada en el README.
+- **Permiso sin gas** (EIP-2612): botón "Autorizar sin gas" en Permisos. El usuario firma y el agente paga el gas en USD₮.
+  Sirve para usuarios **sin CELO** (Ripio fallaba al vender CELO). Hoy anda en `localhost`; en Vercel falta cargar las variables.
+- Registro de decisiones (`web/data/agent-ledger.jsonl`), rendimiento vs. pesos (`node scripts/pnl.mjs`) y **saldos en pesos** en la app.
+- Respuesta de los organizadores en Telegram (Textile FX): *"We read your agent wallet. We don't care about volume. Only innovation and returns."*
+
+**⚠️ El evaluador IA de Loops lee la copia del repo del momento en que se envió la entrega** (commit `1bc7df2`), por eso
+no ve nada de lo de hoy. Hay que **volver a guardar la entrega** para que la tome de nuevo. Queda **1 sola evaluación**
+en el equipo (cuenta de Facundo): la usamos después de volver a guardar.
+
+**Para el domingo:**
+- [ ] **Volver a guardar la entrega** (cualquiera de los dos): Playground → **Submit** → aparece "Draft restored" con campos
+      vacíos → tocar **"Discard draft"** primero (carga la entrega guardada) → pegar la **descripción nueva** (está en la bóveda,
+      `01 Hackatón/Entrega.md`, sección "Descripción nueva"; la vieja prometía x402) → revisar tracks (Textile FX + LatAm) → guardar/enviar.
+      Avisarse antes de enviar.
+- [ ] **Video demo de 2:30–3:00** — guion completo en la bóveda: `01 Hackatón/Guion del video.md`. Hace falta una wallet con
+      ~3.000 wARS y **sin CELO**. Si sos vos el que prueba, también contás como usuario real. Subir a YouTube como "no listado"
+      y pegar el link en la entrega.
+- [ ] **Usuarios reales (2 o 3, UCC):** que carguen wARS con Ripio, entren a la app y toquen "Autorizar sin gas"; con el
+      agente corriendo, se convierte solo. Anotar su wallet, el hash y una frase de cada uno para el README.
+- [ ] **Facundo:** cargar `AGENT_PRIVATE_KEY` y `ATTRIBUTION_CODE` en Vercel (Settings → Environment Variables) para que
+      "Autorizar sin gas" ande en la app publicada. Solo él toca la clave.
+- [ ] Usar la última evaluación del AI Evaluator **después** de volver a guardar la entrega.
+
 ### Gregorio (dueño de la entrada en Loops House: `celo_d25b3d01e1b4`, ya tiene la wallet del agente vinculada)
 - [x] **Crear el equipo (enviado 2026-11-07, tracks Textile FX + LatAm):** en Loops House → Playground → **Submit**, guardar el proyecto desde TU cuenta
       (Submit pide capturas: **Facundo las saca y te las pasa** cuando el agente esté registrado y haya convertido). Datos para copiar
@@ -10,7 +43,7 @@
 - [x] **Invitar a Facundo** desde **Team** para que los dos puedan editar la entrega.
 - [x] Capturas listas (2026-11-07): `docs/capturas/` en el repo y `01 Hackatón/Capturas/` en la bóveda. Subir las 4 en Submit. Link de demo:
       https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424ad7b497E7fd472159
-- [ ] (Si da el tiempo) Video demo de 2–3 min.
+- [ ] (Si da el tiempo) Video demo de 2–3 min → ver "Para el domingo" arriba.
 - [ ] (Si da el tiempo) WalletConnect (tarea 2b, parte B).
 
 ### Facundo (o Gregorio, que creó la wallet del agente en su MetaMask y tiene la clave)
