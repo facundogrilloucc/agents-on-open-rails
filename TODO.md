@@ -3,11 +3,11 @@
 ## 🚨 Cierre: lun 9 nov, 06:00 (Argentina) — entregar el domingo 8
 
 ### Gregorio (dueño de la entrada en Loops House: `celo_d25b3d01e1b4`, ya tiene la wallet del agente vinculada)
-- [ ] **Crear el equipo:** en Loops House → Playground → **Submit**, guardar el proyecto desde TU cuenta
+- [x] **Crear el equipo (enviado 2026-11-07, tracks Textile FX + LatAm):** en Loops House → Playground → **Submit**, guardar el proyecto desde TU cuenta
       (Submit pide capturas: **Facundo las saca y te las pasa** cuando el agente esté registrado y haya convertido). Datos para copiar
       (nombre, descripción, repo, wallet del agente) en la bóveda: `01 Hackatón/Entrega.md`.
       URL de la app: https://agents-on-open-rails.vercel.app
-- [ ] **Invitar a Facundo** desde **Team** para que los dos puedan editar la entrega.
+- [x] **Invitar a Facundo** desde **Team** para que los dos puedan editar la entrega.
 - [x] Capturas listas (2026-11-07): `docs/capturas/` en el repo y `01 Hackatón/Capturas/` en la bóveda. Subir las 4 en Submit. Link de demo:
       https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424ad7b497E7fd472159
 - [ ] (Si da el tiempo) Video demo de 2–3 min.
