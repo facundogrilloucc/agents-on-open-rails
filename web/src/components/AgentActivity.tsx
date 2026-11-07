@@ -40,15 +40,16 @@ export async function fetchMovements(): Promise<Movement[]> {
   if (!res.ok) throw new Error(`Blockscout HTTP ${res.status}`);
   const items: Transfer[] = (await res.json()).items ?? [];
   const agent = AGENT_ADDRESS.toLowerCase();
-  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+  // Dirección de sistema de Celo que cobra y reintegra el gas pagado en stablecoins (fee abstraction).
+  const GAS_SYSTEM = "0x000000000000000000000000000000000ce106a5";
   const byTx = new Map<string, Movement>();
   for (const t of items) {
     const token = KNOWN.get((t.token.address_hash ?? t.token.address ?? "").toLowerCase());
     if (!token) continue;
     const incoming = t.to.hash.toLowerCase() === agent;
     if (!incoming && t.from.hash.toLowerCase() !== agent) continue;
-    // El gas pagado en stablecoins (fee abstraction de Celo) aparece como cobro/reintegro contra 0x0: no es un movimiento.
-    if (t.from.hash.toLowerCase() === ZERO_ADDRESS || t.to.hash.toLowerCase() === ZERO_ADDRESS) continue;
+    // El gas pagado en stablecoins aparece como cobro/reintegro contra esa dirección: no es un movimiento.
+    if (t.from.hash.toLowerCase() === GAS_SYSTEM || t.to.hash.toLowerCase() === GAS_SYSTEM) continue;
     const m = byTx.get(t.transaction_hash) ?? { hash: t.transaction_hash, timestamp: t.timestamp, legs: [], kind: "" };
     const amount = Number(formatUnits(BigInt(t.total.value), token.decimals));
     // Sumar en una sola pata lo del mismo token y sentido (p. ej. monto + comisión de Textile).
