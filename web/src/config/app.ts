@@ -49,6 +49,9 @@ export const ERC8004 = {
   reputationRegistry: "0x8004BAa17C55a88189AE136b182e5fdA19dE9b63",
 } as const satisfies Record<string, Address>;
 
+// Identidad ERC-8004 del agente (registrada el 2026-11-07, tx 0xbad2370c…505d).
+export const AGENT_ID = 10050;
+
 // Link de la rampa de Ripio (sin credenciales). Si están todos los parámetros,
 // el usuario va directo al flujo de compra de wARS en Celo.
 export function ripioOnrampUrl(address: Address, amountArs?: number) {

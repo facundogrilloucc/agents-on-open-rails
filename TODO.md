@@ -13,7 +13,7 @@
 - [ ] (Si da el tiempo) Video demo de 2–3 min.
 - [ ] (Si da el tiempo) WalletConnect (tarea 2b, parte B).
 
-### Facundo (tiene la clave del agente)
+### Facundo (o Gregorio, que creó la wallet del agente en su MetaMask y tiene la clave)
 - [ ] Cargar en la wallet del agente `0x477f…2159`: ~USD 1 de gas (USD₮ o CELO) + ~6.000 wARS.
 - [ ] Crear `web/.env.local` desde `web/.env.example` (ya trae `ATTRIBUTION_CODE=celo_d25b3d01e1b4`) y agregar `AGENT_PRIVATE_KEY`.
 - [ ] Registrar la identidad ERC-8004: `cd web && node scripts/register-agent.mjs --send`.
@@ -30,7 +30,7 @@ Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README
 - **Ninguna transacción en Celo mainnet** hasta definir la entrada del equipo en Loops House y su código de atribución
   (cada cuenta tiene uno distinto; el que calculamos desde el repo, `celo_976812496a25`, **no** es el correcto).
   Todo lo que firma va con la etiqueta ERC-8021 (ver `web/scripts/register-agent.mjs`).
-- La clave del agente (`0x477f…2159`) la tiene solo Facundo. Para probar, cada uno usa su propia wallet de desarrollo.
+- La wallet del agente (`0x477f…2159`) la creó Gregorio en su MetaMask: la clave privada se exporta desde ahí y va solo en `web/.env.local` de quien corra los scripts. Para probar, cada uno usa su propia wallet de desarrollo.
 - Antes de subir cambios: `cd web && npx tsc --noEmit && npm run lint`.
 - Después de cambios grandes: `/graphify --update`, commitear `graphify-out/` (sin la caché) y `node scripts/graph-to-obsidian.mjs`.
 - Mensajes de commit en español, cortos y claros.
