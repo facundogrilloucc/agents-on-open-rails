@@ -1,4 +1,4 @@
-# Tesorería JIT (nombre provisorio)
+# MangoJIT
 
 App web de la hackatón **Agents on Open Rails** (Celo). El usuario carga pesos (wARS) con la rampa de Ripio,
 con un permiso con tope el agente los protege en USD₮ vía Textile FX, dentro de la política de `src/config/agent-policy.json`.

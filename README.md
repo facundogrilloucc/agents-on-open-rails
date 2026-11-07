@@ -1,9 +1,9 @@
-# Tesorería JIT
+# MangoJIT
 
 **A treasury agent that protects Argentine pesos in dollars, on Celo mainnet.**
 Built by Facundo Grillo and Gregorio Miranda for the *Agents on Open Rails* hackathon (Celo × Loops House).
 
-People in Argentina who earn in pesos lose purchasing power every week the money sits idle. Tesorería JIT
+People in Argentina who earn in pesos lose purchasing power every week the money sits idle. MangoJIT
 lets them top up pesos (wARS) with Ripio's on-ramp and gives an agent a **capped permission** to move those
 pesos into USD₮ on **Textile FX**, only at a fair price and within limits the user sets and can revoke.
 

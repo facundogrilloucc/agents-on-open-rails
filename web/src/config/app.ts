@@ -1,7 +1,7 @@
 import type { Address } from "viem";
 
-// Nombre provisorio: cambiarlo acá cambia toda la app.
-export const APP_NAME = "Tesorería JIT";
+// Nombre del proyecto: cambiarlo acá cambia toda la app.
+export const APP_NAME = "MangoJIT";
 export const APP_TAGLINE =
   "Cargás en pesos y tu agente los protege en dólares, con reglas que vos controlás.";
 

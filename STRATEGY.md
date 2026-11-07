@@ -1,4 +1,4 @@
-# Strategy: how the Tesorería JIT agent decides
+# Strategy: how the MangoJIT agent decides
 
 The agent is a **treasury agent** for people who earn and hold Argentine pesos. Its job is to manage the
 user's currency exposure: move pesos (wARS) into dollars (USD₮) on Textile FX, but only at a fair price and
