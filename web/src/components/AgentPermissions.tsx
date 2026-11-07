@@ -90,13 +90,15 @@ function PermissionCard({
   const [gasless, setGasless] = useState<{ pending: boolean; hash?: Hex; error?: string }>({ pending: false });
 
   async function approveGasless(amount: bigint) {
-    if (nonce.data === undefined) return;
     setGasless({ pending: true });
     try {
+      // Leer el nonce justo antes de firmar: cada permiso usado lo incrementa, y uno viejo invalida la firma.
+      const { data: currentNonce } = await nonce.refetch();
+      if (currentNonce === undefined) throw new Error("No se pudo leer el contrato de wARS.");
       const deadline = BigInt(Math.floor(Date.now() / 1000) + PERMIT_TTL_SECONDS);
       const signature = await sign.signTypedDataAsync({
         domain: PERMIT_DOMAIN, types: PERMIT_TYPES, primaryType: "Permit",
-        message: { owner, spender: AGENT_ADDRESS, value: amount, nonce: nonce.data, deadline },
+        message: { owner, spender: AGENT_ADDRESS, value: amount, nonce: currentNonce, deadline },
       });
       const res = await fetch("/api/permit", {
         method: "POST",
