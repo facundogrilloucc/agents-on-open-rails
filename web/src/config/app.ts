@@ -36,6 +36,10 @@ export const TOKENS = {
 
 export const EXPLORER_URL = "https://celoscan.io";
 
+// Código de atribución (ERC-8021) de la entrada del equipo en Loops House. Va al final de toda transacción
+// que la app le pide firmar al usuario (por ejemplo, los permisos al agente). Es público.
+export const ATTRIBUTION_CODE = "celo_d25b3d01e1b4";
+
 // Wallet del agente (EOA). Su clave privada vive solo en .env.local (AGENT_PRIVATE_KEY).
 export const AGENT_ADDRESS: Address = "0x477fb107278e0a21e39b424ad7b497E7fd472159";
 

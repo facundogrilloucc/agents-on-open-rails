@@ -125,7 +125,7 @@ Escribir lo encontrado en la bóveda (nota nueva en `03 Técnico/`).
 
 ## Juntos (custodia definida: permiso con tope)
 
-- [ ] Pantalla de alta: el usuario firma `approve` de wARS (tope de protección) y de USD₮ (presupuesto de gasto) para la wallet del agente; mostrar los permisos vigentes y un botón para revocarlos.
+- [x] Pantalla de permisos (`AgentPermissions.tsx`): `approve` de wARS (tope de protección) y de USD₮ (presupuesto) a la wallet del agente, con etiqueta ERC-8021, permisos vigentes y botón para revocar (2026-11-07).
 - [ ] Backend del agente: detectar wARS del usuario → `transferFrom` → convertir en Textile → devolver USD₮ al usuario; pagar servicios con `transferFrom` de USD₮ + x402, dentro del presupuesto.
 - [ ] Guardar las reglas de presupuesto en el backend (hoy quedan en el navegador).
 - [ ] Conseguir los primeros usuarios reales (devs y estudiantes de la UCC).

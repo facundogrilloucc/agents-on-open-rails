@@ -5,6 +5,7 @@ import { getAddress, isAddress, type Address } from "viem";
 import { useConnection } from "wagmi";
 import { celo } from "wagmi/chains";
 import { AgentActivity } from "@/components/AgentActivity";
+import { AgentPermissions } from "@/components/AgentPermissions";
 import { Balances } from "@/components/Balances";
 import { BudgetSettings } from "@/components/BudgetSettings";
 import { ReadOnlyBanner } from "@/components/ReadOnlyBanner";
@@ -78,6 +79,7 @@ export function Treasury() {
         )}
       </div>
       <Balances address={viewAddress} />
+      <AgentPermissions owner={viewAddress} readOnly={readOnly} />
       <TextileQuote />
       <div className="grid gap-4 md:grid-cols-2">
         <SavingsCard />
