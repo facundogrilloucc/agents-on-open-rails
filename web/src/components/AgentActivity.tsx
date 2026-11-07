@@ -20,8 +20,8 @@ type Transfer = {
   total: { value: string; decimals: string };
 };
 
-type Leg = { symbol: string; amount: number; incoming: boolean };
-type Movement = { hash: string; timestamp: string; legs: Leg[]; kind: string };
+export type Leg = { symbol: string; amount: number; incoming: boolean };
+export type Movement = { hash: string; timestamp: string; legs: Leg[]; kind: string };
 
 function classify(legs: Leg[]): string {
   const outWars = legs.some((l) => l.symbol === "wARS" && !l.incoming);
@@ -35,24 +35,33 @@ function classify(legs: Leg[]): string {
   return "Movimiento";
 }
 
-async function fetchMovements(): Promise<Movement[]> {
+export async function fetchMovements(): Promise<Movement[]> {
   const res = await fetch(`${BLOCKSCOUT}/addresses/${AGENT_ADDRESS}/token-transfers?type=ERC-20`);
   if (!res.ok) throw new Error(`Blockscout HTTP ${res.status}`);
   const items: Transfer[] = (await res.json()).items ?? [];
   const agent = AGENT_ADDRESS.toLowerCase();
+  const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
   const byTx = new Map<string, Movement>();
   for (const t of items) {
     const token = KNOWN.get((t.token.address_hash ?? t.token.address ?? "").toLowerCase());
     if (!token) continue;
     const incoming = t.to.hash.toLowerCase() === agent;
     if (!incoming && t.from.hash.toLowerCase() !== agent) continue;
+    // El gas pagado en stablecoins (fee abstraction de Celo) aparece como cobro/reintegro contra 0x0: no es un movimiento.
+    if (t.from.hash.toLowerCase() === ZERO_ADDRESS || t.to.hash.toLowerCase() === ZERO_ADDRESS) continue;
     const m = byTx.get(t.transaction_hash) ?? { hash: t.transaction_hash, timestamp: t.timestamp, legs: [], kind: "" };
-    m.legs.push({ symbol: token.symbol, amount: Number(formatUnits(BigInt(t.total.value), token.decimals)), incoming });
+    const amount = Number(formatUnits(BigInt(t.total.value), token.decimals));
+    // Sumar en una sola pata lo del mismo token y sentido (p. ej. monto + comisión de Textile).
+    const same = m.legs.find((l) => l.symbol === token.symbol && l.incoming === incoming);
+    if (same) same.amount += amount;
+    else m.legs.push({ symbol: token.symbol, amount, incoming });
     byTx.set(t.transaction_hash, m);
   }
   // Blockscout devuelve lo más reciente primero; alcanza con las últimas 10 operaciones.
   return [...byTx.values()].slice(0, 10).map((m) => ({ ...m, kind: classify(m.legs) }));
 }
+
+export const AGENT_ACTIVITY_KEY = ["agent-activity"];
 
 function fmtAmount(n: number) {
   return n.toLocaleString("es-AR", { maximumFractionDigits: n < 10 ? 4 : 2 });
@@ -60,7 +69,7 @@ function fmtAmount(n: number) {
 
 export function AgentActivity() {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["agent-activity"],
+    queryKey: AGENT_ACTIVITY_KEY,
     queryFn: fetchMovements,
     refetchInterval: 30_000,
   });
