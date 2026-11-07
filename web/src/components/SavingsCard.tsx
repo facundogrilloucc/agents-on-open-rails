@@ -55,8 +55,11 @@ export function SavingsCard() {
           <p className="mt-1 text-sm text-muted tabular-nums">a partir de {ars(warsIn)} wARS convertidos en Textile FX</p>
           {valueToday !== null && diff !== null && (
             <p className="mt-3 text-xs text-muted tabular-nums">
-              Hoy valen {ars(valueToday)} wARS ({diff >= 0 ? "+" : "−"}
-              {ars(Math.abs(diff))} frente a haberlos dejado en pesos). Si el dólar sube, la diferencia crece a tu favor.
+              Hoy valen {ars(valueToday)} wARS
+              {Math.abs(diff) < 1
+                ? " (lo mismo que si los dejabas en pesos)"
+                : ` (${diff > 0 ? "+" : "−"}${ars(Math.abs(diff))} frente a haberlos dejado en pesos)`}
+              . Si el dólar sube, la diferencia crece a tu favor.
             </p>
           )}
         </>
