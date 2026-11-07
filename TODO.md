@@ -8,16 +8,16 @@
       (nombre, descripción, repo, wallet del agente) en la bóveda: `01 Hackatón/Entrega.md`.
       URL de la app: https://agents-on-open-rails.vercel.app
 - [ ] **Invitar a Facundo** desde **Team** para que los dos puedan editar la entrega.
-- [ ] Capturas (2 a 4): las saca Facundo/Claude **después** del registro y la primera conversión, con el link de demo:
+- [x] Capturas listas (2026-11-07): `docs/capturas/` en el repo y `01 Hackatón/Capturas/` en la bóveda. Subir las 4 en Submit. Link de demo:
       https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424ad7b497E7fd472159
 - [ ] (Si da el tiempo) Video demo de 2–3 min.
 - [ ] (Si da el tiempo) WalletConnect (tarea 2b, parte B).
 
 ### Facundo (o Gregorio, que creó la wallet del agente en su MetaMask y tiene la clave)
-- [ ] Cargar en la wallet del agente `0x477f…2159`: ~USD 1 de gas (USD₮ o CELO) + ~6.000 wARS.
-- [ ] Crear `web/.env.local` desde `web/.env.example` (ya trae `ATTRIBUTION_CODE=celo_d25b3d01e1b4`) y agregar `AGENT_PRIVATE_KEY`.
-- [ ] Registrar la identidad ERC-8004: `cd web && node scripts/register-agent.mjs --send`.
-- [ ] Primera conversión real: `node scripts/agent-protect.mjs 2000` (simula) y después con `--send`.
+- [x] Cargar en la wallet del agente `0x477f…2159`: ~USD 1 de gas (USD₮ o CELO) + ~6.000 wARS.
+- [x] Crear `web/.env.local` desde `web/.env.example` (ya trae `ATTRIBUTION_CODE=celo_d25b3d01e1b4`) y agregar `AGENT_PRIVATE_KEY`.
+- [x] Registrar la identidad ERC-8004 → **agentId 10050** (2026-11-07).
+- [x] Primera conversión real: 3.000 wARS → 1,82 USD₮ en Textile, con etiqueta (2026-11-07).
 
 ---
 
