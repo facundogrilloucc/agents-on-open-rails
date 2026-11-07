@@ -26,6 +26,19 @@ Returns versus keeping the pesos, rebuilt from the chain: `cd web && node script
 → 3.6384 USD₮ in 2 conversions (average 1 USD₮ = 1,649.06 wARS), −0.31 % after fees and gas, which is the execution cost
 right after trading; it turns positive as the peso depreciates.
 
+### Guardrail proof: a refused trade
+
+The price guard runs in the signing path ([`lib/protect.mjs`](web/scripts/lib/protect.mjs)), before any transaction.
+To show it refusing, we ran one conversion with the guard tightened to 0 bps (`--max-slippage-bps 0`, which can
+only tighten the policy, never loosen it). Textile quoted 3 bps over its reference, so the agent refused and
+sent nothing. The decision is in the [ledger](web/data/agent-ledger.jsonl) with `policyOverride`:
+
+```
+Guard de precio endurecido para esta corrida: máx. 0 bps (la política dice 50).
+Cotización indicativa: 2.000 wARS → 1,211769 USD₮ · 1 USD₮ = 1650.48 wARS · referencia 1649.98 · 3 bps (máx. 0)
+↷ No se opera: la cotización está 3 bps peor que la referencia.
+```
+
 ## How it works
 
 1. **Top up pesos.** The user buys wARS with Ripio's on-ramp, straight to their own wallet on Celo.
