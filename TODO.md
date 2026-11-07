@@ -1,5 +1,25 @@
 # ToDo del equipo
 
+## 🚨 Cierre: lun 9 nov, 06:00 (Argentina) — entregar el domingo 8
+
+### Gregorio (dueño de la entrada en Loops House: `celo_d25b3d01e1b4`, ya tiene la wallet del agente vinculada)
+- [ ] **Crear el equipo:** en Loops House → Playground → **Submit**, guardar el proyecto desde TU cuenta. Datos para copiar
+      (nombre, descripción, repo, wallet del agente) en la bóveda: `01 Hackatón/Entrega.md`.
+      URL de la app: https://agents-on-open-rails.vercel.app
+- [ ] **Invitar a Facundo** desde **Team** para que los dos puedan editar la entrega.
+- [ ] Capturas (2 a 4) **después** de que el agente esté registrado y haga su primera conversión. Usar el link de demo:
+      https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424ad7b497E7fd472159
+- [ ] (Si da el tiempo) Video demo de 2–3 min.
+- [ ] (Si da el tiempo) WalletConnect (tarea 2b, parte B).
+
+### Facundo (tiene la clave del agente)
+- [ ] Cargar en la wallet del agente `0x477f…2159`: ~USD 1 de gas (USD₮ o CELO) + ~6.000 wARS.
+- [ ] Crear `web/.env.local` desde `web/.env.example` (ya trae `ATTRIBUTION_CODE=celo_d25b3d01e1b4`) y agregar `AGENT_PRIVATE_KEY`.
+- [ ] Registrar la identidad ERC-8004: `cd web && node scripts/register-agent.mjs --send`.
+- [ ] Primera conversión real: `node scripts/agent-protect.mjs 2000` (simula) y después con `--send`.
+
+---
+
 Cierre de la hackatón: **lun 9 nov, 06:00 (Argentina)**. Entregamos el **8 de noviembre**.
 Detalle y contexto de cada tema: bóveda de Obsidian (`00 Inicio.md`) y [`README.md`](README.md).
 
@@ -68,8 +88,8 @@ Demo: https://agents-on-open-rails.vercel.app/?address=0x477fb107278e0a21e39b424
 
 ### 3. Actividad real del agente (prioridad media)
 Reemplazar el estado vacío de `web/src/components/AgentActivity.tsx` por datos de la blockchain (solo lectura).
-- [ ] Leer con viem los eventos `Transfer` de wARS, USD₮ y USDC donde participe la wallet del agente (`AGENT_ADDRESS` en `web/src/config/app.ts`).
-- [ ] Listar fecha, tipo (entrada / conversión / pago), monto y link a `https://celoscan.io/tx/<hash>`.
+- [x] Leer los movimientos de la wallet del agente (hecho por Facundo/Claude 2026-11-07 con la API de Blockscout).
+- [x] Listar fecha, tipo (entrada / conversión / pago), monto y link a `https://celoscan.io/tx/<hash>`.
 - **Listo cuando:** muestra "sin movimientos" hoy y va a mostrar los reales apenas el agente opere.
 
 ### 4. Ahorro frente a quedarse en pesos (prioridad media)
