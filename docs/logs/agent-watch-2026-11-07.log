@@ -1,0 +1,18 @@
+# Salida de `node scripts/agent-watch.mjs --send` (Facundo, 2026-11-07, hora Argentina = UTC-3).
+# El usuario 0xbeBC…443F firmó un permiso sin gas (EIP-2612) a las 15:34 (tx 0xfc04d39c…b64e).
+# Nadie tocó nada después de lanzar el watcher: detectó el permiso y operó solo.
+[7/11/2026, 15:38:25] Agente 0x477fb107278e0a21e39b424ad7b497E7fd472159 · MODO REAL (--send)
+[7/11/2026, 15:38:26] usuario 0xbeBC…443F: hay 3.000 wARS para proteger → intento con 3.000 wARS
+[7/11/2026, 15:38:28]   Cotización indicativa: 3.000 wARS → 1,819151 USD₮ · 1 USD₮ = 1649.12 wARS · referencia 1648.63 · 3 bps (máx. 50)
+[7/11/2026, 15:38:29]   → tomar wARS del usuario: https://celoscan.io/tx/0xaf0472955c3edd6abfb65e6eefd9ffe8349031b470775f4c7d6e8bdf358ef7fd
+[7/11/2026, 15:38:31]   Cotización firme rfq_lRqj5uEs74So5IrK: 3.000 wARS → 1,819151 USD₮ · 3 bps vs. referencia · vence 2026-11-07T18:40:31.000Z
+[7/11/2026, 15:38:31]   → permiso a Textile: https://celoscan.io/tx/0x2b9745171281175b005107ae225f9fd3655c476154e910b1e71d1d2c8af4d7db
+[7/11/2026, 15:38:34]   → conversión en Textile: https://celoscan.io/tx/0x3109ce6f300043104bde79d2efe74e7ccc22c9a1e9fabafa0c4f0fe1e3ffd6d3
+[7/11/2026, 15:38:39]   → devolver USD₮ al usuario: https://celoscan.io/tx/0x3dc5392ea3cdd979650c2cd9a1acbb9bfc8f33a88a0263c5da4fdb6743d86a58
+[7/11/2026, 15:38:40]   ✓ Protegidos 3.000 wARS → 1,819151 USD₮
+  ✓ etiqueta: celo_d25b3d01e1b4
+  ✓ etiqueta: celo_d25b3d01e1b4
+  ✓ etiqueta: celo_d25b3d01e1b4
+  ✓ etiqueta: celo_d25b3d01e1b4
+[7/11/2026, 15:39:42] sin pesos para proteger (mínimo 1.700 wARS).
+[7/11/2026, 15:40:43] sin pesos para proteger (mínimo 1.700 wARS).

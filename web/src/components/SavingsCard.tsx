@@ -2,29 +2,16 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { AGENT_ACTIVITY_KEY, fetchMovements } from "@/components/AgentActivity";
-import type { TextileQuoteResponse } from "@/app/api/textile/quote/route";
+import { useWarsPerUsdt } from "@/lib/useWarsPerUsdt";
 
 // Pesos que el agente ya pasó a dólares (conversiones reales en Textile, leídas de la blockchain)
-// y cuánto valen hoy esos USD₮ en pesos con la cotización actual de Textile FX.
-async function fetchWarsPerUsdt(): Promise<number | null> {
-  const res = await fetch("/api/textile/quote", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ direction: "wARS_to_USDT", amount: 10000 }),
-  });
-  const q: TextileQuoteResponse = await res.json();
-  // Precio de referencia de Textile (el mismo benchmark que scripts/pnl.mjs); si no está, la cotización.
-  if (q.status === "preview") return q.referenceWarsPerUsdt ?? q.warsPerUsdt;
-  if (q.status === "no_quote") return q.referenceWarsPerUsdt;
-  return null;
-}
-
+// y cuánto valen hoy esos USD₮ en pesos con el precio de referencia de Textile FX.
 const ars = (n: number) => n.toLocaleString("es-AR", { maximumFractionDigits: 0 });
 const usd = (n: number) => n.toLocaleString("es-AR", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
 
 export function SavingsCard() {
   const movements = useQuery({ queryKey: AGENT_ACTIVITY_KEY, queryFn: fetchMovements, refetchInterval: 30_000 });
-  const rate = useQuery({ queryKey: ["wars-per-usdt"], queryFn: fetchWarsPerUsdt, refetchInterval: 60_000 });
+  const rate = useWarsPerUsdt();
 
   let warsIn = 0;
   let usdOut = 0;

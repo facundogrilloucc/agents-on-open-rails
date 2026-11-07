@@ -31,7 +31,7 @@ export async function protect({ amount, user = null, send, account, code, policy
   const source = user ?? agent;
   const skip = (reason, extra = {}) => {
     log(`↷ No se opera: ${reason}`);
-    if (send) appendLedger({ type: "decision", action: "skip", reason, user, amountWei: amount.toString(), ...extra });
+    if (send) appendLedger({ type: "decision", action: "skip", reason, user, amountWei: amount.toString(), ...(policy.override ? { policyOverride: policy.override } : {}), ...extra });
     return { status: "skipped", reason };
   };
 
@@ -41,22 +41,7 @@ export async function protect({ amount, user = null, send, account, code, policy
   const today = convertedLast24h();
   if (today + amount > policy.maxDaily) return skip(`superaría el tope diario (${fmt(SELL, today)} convertidos en 24 h, tope ${fmt(SELL, policy.maxDaily)}).`);
 
-  // --- 2. Fondos y permiso (en simulación solo avisa, para poder ver la cotización igual)
-  const short = (reason) => (send ? skip(reason) : (log(`⚠ ${reason} (simulación: sigo para mostrar la cotización)`), null));
-  const bal = await balanceOf(SELL, source);
-  if (bal < amount) {
-    const r = short(`${user ? "el usuario" : "el agente"} tiene ${fmt(SELL, bal)}, menos que ${fmt(SELL, amount)}.`);
-    if (r) return r;
-  }
-  if (user) {
-    const allowance = await publicClient.readContract({ address: SELL.address, abi: erc20Abi, functionName: "allowance", args: [user, agent] });
-    if (allowance < amount) {
-      const r = short(`el permiso del usuario (${fmt(SELL, allowance)}) no alcanza.`);
-      if (r) return r;
-    }
-  }
-
-  // --- 3. Textile: límites del par y cotización indicativa contra la referencia
+  // --- 2. Textile: límites del par y cotización indicativa contra la referencia
   const limits = await pairLimits(SELL.address, BUY.address);
   if (!limits) return skip("Textile no tiene habilitado el par wARS → USD₮.");
   if (amount < limits.min) return skip(`el mínimo de Textile hoy es ${fmt(SELL, limits.min)}.`);
@@ -70,6 +55,21 @@ export async function protect({ amount, user = null, send, account, code, policy
     (refRate ? ` · referencia ${refRate.toFixed(2)} · ${indicative.bps} bps (máx. ${policy.maxSlippageBps})` : " · referencia no disponible"));
   if (refRate === null) return skip("no hay precio de referencia para controlar la cotización.");
   if (indicative.bps > policy.maxSlippageBps) return skip(`la cotización está ${indicative.bps} bps peor que la referencia.`, { refRate, rate: indicative.rate });
+
+  // --- 3. Fondos y permiso (en simulación solo avisa, para poder ver la cotización igual)
+  const short = (reason) => (send ? skip(reason) : (log(`⚠ ${reason} (simulación: sigo para mostrar la cotización)`), null));
+  const bal = await balanceOf(SELL, source);
+  if (bal < amount) {
+    const r = short(`${user ? "el usuario" : "el agente"} tiene ${fmt(SELL, bal)}, menos que ${fmt(SELL, amount)}.`);
+    if (r) return r;
+  }
+  if (user) {
+    const allowance = await publicClient.readContract({ address: SELL.address, abi: erc20Abi, functionName: "allowance", args: [user, agent] });
+    if (allowance < amount) {
+      const r = short(`el permiso del usuario (${fmt(SELL, allowance)}) no alcanza.`);
+      if (r) return r;
+    }
+  }
 
   if (!send) {
     log("Simulación: con --send se ejecutaría.");
