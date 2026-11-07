@@ -13,7 +13,7 @@
   (rechaza cotizaciones > 0,5 % peores que la referencia de Textile). Reemplaza las "reglas" que solo se guardaban en el navegador.
   Hay una operación rechazada de prueba documentada en el README.
 - **Permiso sin gas** (EIP-2612): botón "Autorizar sin gas" en Permisos. El usuario firma y el agente paga el gas en USD₮.
-  Sirve para usuarios **sin CELO** (Ripio fallaba al vender CELO). Hoy anda en `localhost`; en Vercel falta cargar las variables.
+  Sirve para usuarios **sin CELO** (Ripio fallaba al vender CELO). Anda en `localhost` y en la app publicada (variables cargadas en Vercel el 7/11).
 - Registro de decisiones (`web/data/agent-ledger.jsonl`), rendimiento vs. pesos (`node scripts/pnl.mjs`) y **saldos en pesos** en la app.
 - Respuesta de los organizadores en Telegram (Textile FX): *"We read your agent wallet. We don't care about volume. Only innovation and returns."*
 
@@ -31,7 +31,7 @@ en el equipo (cuenta de Facundo): la usamos después de volver a guardar.
       y pegar el link en la entrega.
 - [ ] **Usuarios reales (2 o 3, UCC):** que carguen wARS con Ripio, entren a la app y toquen "Autorizar sin gas"; con el
       agente corriendo, se convierte solo. Anotar su wallet, el hash y una frase de cada uno para el README.
-- [ ] **Facundo:** cargar `AGENT_PRIVATE_KEY` y `ATTRIBUTION_CODE` en Vercel (Settings → Environment Variables) para que
+- [x] **Facundo:** cargar `AGENT_PRIVATE_KEY` y `ATTRIBUTION_CODE` en Vercel (hecho 7/11; la ruta responde. Si un usuario ve "Configuración del agente inválida", la clave quedó mal) (Settings → Environment Variables) para que
       "Autorizar sin gas" ande en la app publicada. Solo él toca la clave.
 - [ ] Usar la última evaluación del AI Evaluator **después** de volver a guardar la entrega.
 
